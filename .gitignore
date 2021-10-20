@@ -1,0 +1,14 @@
+build/
+.vscode
+CMakeFiles/
+*.a
+*.cmake
+Makefile
+CMakeCache.txt
+demo1_motion_position
+demo2_motion_velocity
+demo3_motion_current
+demo4_get_param
+demo1_report
+demo2_get_param
+demo3_motion_joint_space_p2p

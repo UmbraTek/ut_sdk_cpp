@@ -7,10 +7,12 @@
 #include "utapi/utra/utra_api_tcp.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.89";
+  char ip[] = "192.168.1.14";
   UtraApiTcp *utra = new UtraApiTcp(ip);
 
-  int ret = utra->set_motion_mode(1);
+  int ret = utra->reset_err();
+  printf("reset_err   : %d\n", ret);
+  ret = utra->set_motion_mode(0);
   printf("set_motion_mode   : %d\n", ret);
   ret = utra->set_motion_enable(8, 1);
   printf("set_motion_enable : %d\n", ret);

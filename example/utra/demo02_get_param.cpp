@@ -8,7 +8,7 @@
 #include "utapi/utra/utra_api_tcp.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.89";
+  char ip[] = "192.168.1.175";
 
   UtraApiTcp *ubot = new UtraApiTcp(ip);
 

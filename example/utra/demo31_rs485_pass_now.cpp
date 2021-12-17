@@ -26,21 +26,18 @@ int main(int argc, char *argv[]) {
   ret = ubot->moveto_joint_p2p(joint, speed, acc, 0);
   printf("moveto_joint_p2p  : %d\n", ret);
 
-  float pos1[6] = {-0.0, -360.0, 800.0, 1.58, 0.0, 0.0};
-  float pos2[6] = {-8.0, -560.0, 600.0, 1.58, 0.0, 0.0};
-  float pos3[6] = {-180.0, -560.0, 600.0, 1.58, 0.0, 0.0};
-  speed = 50.0;
-  acc = 100.0;
+  float joint1[6] = {1.248, 1.416, 1.155, -0.252, -1.248, -0.003};
+  float joint2[6] = {0.990, 1.363, 1.061, -0.291, -0.990, -0.006};
+  float joint3[6] = {1.169, 1.022, 1.070, 0.058, -1.169, -0.004};
 
-  ret = ubot->moveto_cartesian_line(pos3, speed, acc, 5.0);
-  printf("moveto_cartesian_line   :%d\n", (ret));
-
-  ret = ubot->moveto_cartesian_circle(pos1, pos2, speed, acc, 5, 50);
-  printf("moveto_cartesian_circle   :%d\n", ret);
-  ret = ubot->moveto_cartesian_circle(pos2, pos3, speed, acc, 5, 100);
-  printf("moveto_cartesian_circle   :%d\n", ret);
-  ret = ubot->moveto_cartesian_circle(pos2, pos1, speed, acc, 5, 125);
-  printf("moveto_cartesian_circle   :%d\n", ret);
+  ret = ubot->moveto_joint_p2p(joint3, speed, acc, 0);
+  printf("moveto_joint_p2p  : %d\n", ret);
+  ret = ubot->moveto_joint_p2p(joint1, speed, acc, 0);
+  printf("moveto_joint_p2p  : %d\n", ret);
+  ret = ubot->moveto_joint_p2p(joint2, speed, acc, 0);
+  printf("moveto_joint_p2p  : %d\n", ret);
+  ret = ubot->moveto_joint_p2p(joint3, speed, acc, 0);
+  printf("moveto_joint_p2p  : %d\n", ret);
 
   return 0;
 }

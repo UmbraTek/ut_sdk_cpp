@@ -20,6 +20,7 @@ add_library(utapi STATIC
     utra/utra_report_status.cpp
     utra/utra_report_config.cpp
     utra/utra_flxie_api.cpp
+    utra/utra_flxiv_api.cpp
     )
 
 target_link_libraries(utapi rt pthread)

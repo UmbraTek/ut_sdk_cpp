@@ -8,22 +8,22 @@
 
 int main(int argc, char *argv[]) {
   char ip[] = "192.168.1.175";
-  UtraApiTcp *utra = new UtraApiTcp(ip);
+  UtraApiTcp *ubot = new UtraApiTcp(ip);
 
-  int ret = utra->reset_err();
+  int ret = ubot->reset_err();
   printf("reset_err   : %d\n", ret);
-  ret = utra->set_motion_mode(0);
+  ret = ubot->set_motion_mode(0);
   printf("set_motion_mode   : %d\n", ret);
-  ret = utra->set_motion_enable(8, 1);
+  ret = ubot->set_motion_enable(8, 1);
   printf("set_motion_enable : %d\n", ret);
-  ret = utra->set_motion_status(0);
+  ret = ubot->set_motion_status(0);
   printf("set_motion_status : %d\n", ret);
 
   float joint[6] = {0, 0, 0, 0, 0, 0};
   float speed = 0.1;
   float acc = 3;
 
-  ret = utra->moveto_joint_p2p(joint, speed, acc, 0);
+  ret = ubot->moveto_joint_p2p(joint, speed, acc, 0);
   printf("moveto_joint_p2p  : %d\n", ret);
 
   int count = 6;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   memcpy(&frames[24], joint5, sizeof(joint5));
   memcpy(&frames[30], joint6, sizeof(joint6));
 
-  ret = utra->moveto_servo_joint(3, frames, time);
+  ret = ubot->moveto_servo_joint(3, frames, time);
   printf("moveto_servo_joint  : %d\n", ret);
 
   return 0;

@@ -56,3 +56,15 @@ add_executable(demo23_flxie2_motion_que
 	demo23_flxie2_motion_que.cpp
 )
 target_link_libraries(demo23_flxie2_motion_que utapi pthread rt m)
+
+
+add_executable(demo24_flxiv_get_param
+	demo24_flxiv_get_param.cpp
+)
+target_link_libraries(demo24_flxiv_get_param utapi pthread rt m)
+
+
+add_executable(demo25_flxiv_motion_now
+	demo25_flxiv_motion_now.cpp
+)
+target_link_libraries(demo25_flxiv_motion_now utapi pthread rt m)

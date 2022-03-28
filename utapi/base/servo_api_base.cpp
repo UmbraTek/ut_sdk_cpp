@@ -29,7 +29,7 @@ void ServoApiBase::servoinit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_
     utrc_tx_.master_id = 0xAA;
     utrc_tx_.slave_id = servo_id;
     utrc_tx_.state = 0x00;
-  } else if (bus_type_ == BUS_TYPE::CANBUS) {
+  } else if (bus_type_ == BUS_TYPE::UTCC) {
   }
 }
 
@@ -55,46 +55,55 @@ int ServoApiBase::sendpend(int id, uint8_t rw, const uint8_t cmd[5], uint8_t* tx
     rx_len = cmd[4];
   }
 
-  pthread_mutex_lock(&mutex_);
   if (bus_type_ == BUS_TYPE::UTRC) {
     id_ = id;
     utrc_tx_.slave_id = id_;
-  } else if (bus_type_ == BUS_TYPE::CANBUS) {
+  } else if (bus_type_ == BUS_TYPE::UTCC) {
   }
   send(rw, cmd[0], tx_len, tx_data);
   int ret = pend(rx_len, timeout_s);
-  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
 int ServoApiBase::get_reg_int8(int id, uint8_t* value, const uint8_t reg[5]) {
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg, NULL);
   memcpy(value, &utrc_rx_.data[0], reg[2]);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
 int ServoApiBase::set_reg_int8(int id, uint8_t* value, const uint8_t reg[5]) {
-  return sendpend(id, SERVO_RW::W, reg, value);  //
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(id, SERVO_RW::W, reg, value);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
 }
 
 int ServoApiBase::get_reg_int32(int id, int* value, const uint8_t reg[5]) {
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg, NULL);
   *value = HexData::hex_to_int32_big(&utrc_rx_.data[0]);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
 int ServoApiBase::set_reg_int32(int id, int value, const uint8_t reg[5]) {
   uint8_t data[4];
   HexData::int32_to_hex_big(value, &data[0]);
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::W, reg, data);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
 int ServoApiBase::get_reg_fp32(int id, float* value, const uint8_t reg[5]) {
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg, NULL);
   // int32_t value_int = HexData::hex_to_int32_big(&utrc_rx_.data[0]);
   // *value = SERVO_INT_TO_FP(value_int);
   HexData::hex_to_fp32_big(&utrc_rx_.data[0], value, 1);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
@@ -103,7 +112,9 @@ int ServoApiBase::set_reg_fp32(int id, float value, const uint8_t reg[5]) {
   // int32_t value_int = SERVO_FP_TO_INT(value);
   // HexData::int32_to_hex_big(value_int, data);
   HexData::fp32_to_hex_big(value, data);
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::W, reg, data);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
@@ -170,6 +181,8 @@ int ServoApiBase::get_elec_ratio_(int id, float* ratio) { return get_reg_fp32(id
 int ServoApiBase::set_elec_ratio_(int id, float ratio) { return set_reg_fp32(id, ratio, reg_.ELEC_RATIO); }
 int ServoApiBase::get_motion_dir_(int id, uint8_t* dir) { return get_reg_int8(id, dir, reg_.MOTION_DIR); }
 int ServoApiBase::set_motion_dir_(int id, uint8_t dir) { return set_reg_int8(id, dir, reg_.MOTION_DIR); }
+int ServoApiBase::get_iwdg_cyc_(int id, int* cyc) { return get_reg_int32(id, cyc, reg_.IWDG_CYC); }
+int ServoApiBase::set_iwdg_cyc_(int id, int cyc) { return set_reg_int32(id, cyc, reg_.IWDG_CYC); }
 int ServoApiBase::get_temp_limit_(int id, int8_t* min, int8_t* max) { return get_reg_int8(id, min, max, reg_.TEMP_LIMIT); }
 int ServoApiBase::set_temp_limit_(int id, int8_t min, int8_t max) { return set_reg_int8(id, min, max, reg_.TEMP_LIMIT); }
 int ServoApiBase::get_volt_limit_(int id, uint8_t* min, uint8_t* max) { return get_reg_int8(id, min, max, reg_.VOLT_LIMIT); }
@@ -212,15 +225,19 @@ int ServoApiBase::get_pos_smooth_cyc_(int id, uint8_t* cyc) { return get_reg_int
 int ServoApiBase::set_pos_smooth_cyc_(int id, uint8_t cyc) { return set_reg_int8(id, cyc, reg_.POS_SMOOTH_CYC); }
 int ServoApiBase::get_pos_adrc_param_(int id, uint8_t i, float* param) {
   uint8_t data[1] = {i};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg_.POS_ADRC_PARAM, data);
   HexData::hex_to_fp32_big(&utrc_rx_.data[0], param, 1);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 int ServoApiBase::set_pos_adrc_param_(int id, uint8_t i, float param) {
   uint8_t data[4];
   HexData::fp32_to_hex_big(param, data);
   uint8_t txdata[5] = {i, data[0], data[1], data[2], data[3]};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::W, reg_.POS_ADRC_PARAM, txdata);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 int ServoApiBase::pos_cal_zero_(int id) { return set_reg_int8(id, reg_.POS_CAL_ZERO[0], reg_.POS_CAL_ZERO); }
@@ -243,15 +260,19 @@ int ServoApiBase::get_vel_smooth_cyc_(int id, uint8_t* cyc) { return get_reg_int
 int ServoApiBase::set_vel_smooth_cyc_(int id, uint8_t cyc) { return set_reg_int8(id, cyc, reg_.VEL_SMOOTH_CYC); }
 int ServoApiBase::get_vel_adrc_param_(int id, uint8_t i, float* param) {
   uint8_t data[1] = {i};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg_.VEL_ADRC_PARAM, data);
   HexData::hex_to_fp32_big(&utrc_rx_.data[0], param, 1);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 int ServoApiBase::set_vel_adrc_param_(int id, uint8_t i, float param) {
   uint8_t data[4];
   HexData::fp32_to_hex_big(param, data);
   uint8_t txdata[5] = {i, data[0], data[1], data[2], data[3]};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::W, reg_.VEL_ADRC_PARAM, txdata);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
@@ -273,27 +294,30 @@ int ServoApiBase::get_tau_smooth_cyc_(int id, uint8_t* cyc) { return get_reg_int
 int ServoApiBase::set_tau_smooth_cyc_(int id, uint8_t cyc) { return set_reg_int8(id, cyc, reg_.TAU_SMOOTH_CYC); }
 int ServoApiBase::get_tau_adrc_param_(int id, uint8_t i, float* param) {
   uint8_t data[1] = {i};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg_.TAU_ADRC_PARAM, data);
   HexData::hex_to_fp32_big(&utrc_rx_.data[0], param, 1);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
+
 int ServoApiBase::set_tau_adrc_param_(int id, uint8_t i, float param) {
   uint8_t data[4];
   HexData::fp32_to_hex_big(param, data);
   uint8_t txdata[5] = {i, data[0], data[1], data[2], data[3]};
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::W, reg_.TAU_ADRC_PARAM, txdata);
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
 int ServoApiBase::set_cpos_target_(uint8_t sid, uint8_t eid, float* pos) {
   int num = eid - sid + 1;
-  int32_t temp[num];
-  for (int i = 0; i < num; i++) temp[i] = SERVO_FP_TO_INT(pos[i]);
 
   uint8_t data[4 * num + 2];
   data[0] = sid;
   data[1] = eid;
-  HexData::int32_to_hex_big(temp, &data[2], num);
+  HexData::fp32_to_hex_big(pos, &data[2], num);
 
   pthread_mutex_lock(&mutex_);
   id_ = 0x55;
@@ -301,20 +325,62 @@ int ServoApiBase::set_cpos_target_(uint8_t sid, uint8_t eid, float* pos) {
   reg_.CPOS_TARGET[3] = 2 + 4 * num;
   send(SERVO_RW::W, reg_.CPOS_TARGET[0], num * 4 + 2, data);
   pthread_mutex_unlock(&mutex_);
+  return 0;
+}
 
+int ServoApiBase::set_ctau_target_(uint8_t sid, uint8_t eid, float* tau) {
+  int num = eid - sid + 1;
+
+  uint8_t data[4 * num + 2];
+  data[0] = sid;
+  data[1] = eid;
+  HexData::fp32_to_hex_big(tau, &data[2], num);
+
+  pthread_mutex_lock(&mutex_);
+  id_ = 0x55;
+  utrc_tx_.slave_id = id_;
+  reg_.CTAU_TARGET[3] = 2 + 4 * num;
+  send(SERVO_RW::W, reg_.CTAU_TARGET[0], num * 4 + 2, data);
+  pthread_mutex_unlock(&mutex_);
+  return 0;
+}
+
+int ServoApiBase::set_cpostau_target_(uint8_t sid, uint8_t eid, float* pos, float* tau) {
+  int num = (eid - sid + 1);
+  float postau[num * 2];
+  for (int i = 0; i < num; i++) {
+    postau[i * 2] = pos[i];
+    postau[i * 2 + 1] = tau[i];
+  }
+
+  uint8_t data[4 * num * 2 + 2];
+  data[0] = sid;
+  data[1] = eid;
+  HexData::fp32_to_hex_big(postau, &data[2], num * 2);
+  reg_.CPOSTAU_TARGET[3] = 4 * num * 2 + 2;
+
+  pthread_mutex_lock(&mutex_);
+  id_ = 0x55;
+  utrc_tx_.slave_id = id_;
+  send(SERVO_RW::W, reg_.CPOSTAU_TARGET[0], 4 * num * 2 + 2, data);
+  pthread_mutex_unlock(&mutex_);
   return 0;
 }
 
 int ServoApiBase::get_spostau_current_(int id, int* num, float* pos, float* tau) {
+  pthread_mutex_lock(&mutex_);
   int ret = sendpend(id, SERVO_RW::R, reg_.SPOSTAU_CURRENT, NULL);
-  *num = utrc_rx_.data[0];
-  HexData::hex_to_fp32_big(&utrc_rx_.data[1], pos, 1);
-  HexData::hex_to_fp32_big(&utrc_rx_.data[5], tau, 1);
-  // int32_t pos_int = HexData::hex_to_int32_big(&utrc_rx_.data[1]);
-  // int32_t tau_int = HexData::hex_to_int32_big(&utrc_rx_.data[5]);
 
-  // *pos = SERVO_INT_TO_FP(pos_int);
-  // *tau = SERVO_INT_TO_FP(tau_int);
+  if (ret == UTRC_ERROR::TIMEOUT) {
+    *num = 0;
+    *pos = 0;
+    *tau = 0;
+  } else {
+    *num = utrc_rx_.data[0];
+    *pos = HexData::hex_to_fp32_big(&utrc_rx_.data[1]);
+    *tau = HexData::hex_to_fp32_big(&utrc_rx_.data[5]);
+  }
+  pthread_mutex_unlock(&mutex_);
   return ret;
 }
 
@@ -326,7 +392,7 @@ int ServoApiBase::get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float
   uint8_t rw = SERVO_RW::R;
   const uint8_t* cmd = reg_.CPOSTAU_CURRENT;
   uint8_t tx_data[2] = {sid, eid};
-  float timeout_s = 0.005;
+  float timeout_s = 0.05;
   int tx_len = cmd[1];
   int rx_len = cmd[2];
 
@@ -338,12 +404,16 @@ int ServoApiBase::get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float
   for (int i = 0; i < eid - sid + 1; i++) {
     ret[i] = pend(rx_len, timeout_s);
     if (utrc_rx_.master_id != i + 1) ret[i] = UTRC_ERROR::TIMEOUT;
+    if (ret[i] != UTRC_ERROR::TIMEOUT) {
+      num[i] = utrc_rx_.data[0];
+      pos[i] = HexData::hex_to_fp32_big(&utrc_rx_.data[1]);
+      tau[i] = HexData::hex_to_fp32_big(&utrc_rx_.data[5]);
+    } else {
+      num[i] = 0;
+      pos[i] = 0;
+      tau[i] = 0;
+    }
 
-    num[i] = utrc_rx_.data[0];
-    int32_t pos_int = HexData::hex_to_int32_big(&utrc_rx_.data[1]);
-    int32_t tau_int = HexData::hex_to_int32_big(&utrc_rx_.data[5]);
-    pos[i] = SERVO_INT_TO_FP(pos_int);
-    tau[i] = SERVO_INT_TO_FP(tau_int);
     temp += ret[i];
   }
   pthread_mutex_unlock(&mutex_);

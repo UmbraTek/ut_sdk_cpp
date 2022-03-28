@@ -127,6 +127,10 @@ int UtraFlxiE2Api::get_motion_enable(uint8_t *value) {
   return utra_api_->get_utrc_int8_now(line_, id_, reg_.MOTION_ENABLE[0], value);
 }
 
+int UtraFlxiE2Api::set_unlock_function(uint8_t value) {
+  return utra_api_->set_utrc_int8_now(line_, id_, flxie_reg_.UNLOCK_FUN[0], value);
+}
+
 int UtraFlxiE2Api::get_temp_motor(float *value) {
   return utra_api_->get_utrc_float_now(line_, id_, reg_.TEMP_MOTOR[0], value);  //
 }

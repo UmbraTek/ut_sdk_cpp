@@ -34,6 +34,8 @@ class ServoApiBase {
   int set_elec_ratio_(int id, float ratio);
   int get_motion_dir_(int id, uint8_t* dir);
   int set_motion_dir_(int id, uint8_t dir);
+  int get_iwdg_cyc_(int id, int* cyc);
+  int set_iwdg_cyc_(int id, int cyc);
   int get_temp_limit_(int id, int8_t* min, int8_t* max);
   int set_temp_limit_(int id, int8_t min, int8_t max);
   int get_volt_limit_(int id, uint8_t* min, uint8_t* max);
@@ -109,6 +111,8 @@ class ServoApiBase {
   int set_tau_adrc_param_(int id, uint8_t i, float param);
 
   int set_cpos_target_(uint8_t sid, uint8_t eid, float* pos);
+  int set_ctau_target_(uint8_t sid, uint8_t eid, float* tau);
+  int set_cpostau_target_(uint8_t sid, uint8_t eid, float* pos, float* tau);
   int get_spostau_current_(int id, int* num, float* pos, float* tau);
   int get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
 
@@ -149,11 +153,8 @@ class SERVO_RW {
 
 class BUS_TYPE {
  public:
-  const static uint8_t CANBUS = 1;
+  const static uint8_t UTCC = 1;
   const static uint8_t UTRC = 2;
 };
-
-#define SERVO_FP_TO_INT(a) ((a)*100000)
-#define SERVO_INT_TO_FP(a) (float(a) * 0.00001)
 
 #endif

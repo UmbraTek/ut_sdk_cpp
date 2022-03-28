@@ -36,6 +36,7 @@ class UtraFlxiE2Api {
   int get_motion_mode(uint8_t *value);
   int set_motion_enable(uint8_t value, bool now = true);
   int get_motion_enable(uint8_t *value);
+  int set_unlock_function(uint8_t value);
   int get_temp_motor(float *value);
   int get_temp_driver(float *value);
   int get_bus_volt(float *value);

@@ -32,6 +32,8 @@ class AdraApiBase : private ServoApiBase {
   int set_elec_ratio(int id, float ratio);
   int get_motion_dir(int id, uint8_t* dir);
   int set_motion_dir(int id, uint8_t dir);
+  int get_iwdg_cyc(int id, int* cyc);
+  int set_iwdg_cyc(int id, int cyc);
   int get_temp_limit(int id, int8_t* min, int8_t* max);
   int set_temp_limit(int id, int8_t min, int8_t max);
   int get_volt_limit(int id, uint8_t* min, uint8_t* max);
@@ -111,7 +113,9 @@ class AdraApiBase : private ServoApiBase {
   int set_tau_adrc_param(int id, uint8_t i, float param);
 
   int set_cpos_target(uint8_t sid, uint8_t eid, float* pos);
-  int get_spostau_current(int id, int* num, float* pos, float* tau);
+  int set_ctau_target(uint8_t sid, uint8_t eid, float* tau);
+  int set_cpostau_target(uint8_t sid, uint8_t eid, float* pos, float* tau);
+  int get_spostau_current(uint8_t id, int* num, float* pos, float* tau);
   int get_cpostau_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
 
  private:

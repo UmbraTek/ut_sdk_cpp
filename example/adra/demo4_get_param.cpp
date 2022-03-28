@@ -6,11 +6,15 @@
  ============================================================================*/
 #include "utapi/adra/adra_api_serial.h"
 
+/**
+ * This is demo to get the state and parameters of the actuator¡£
+ * The actuator ID is 1 and RS485 baud rate is 921600
+ * Linux requires super user privileges to run code.
+ */
 int main(int argc, char *argv[]) {
-  const char com[] = "/dev/ttyUSB0";
-  int baud = 921600;
   int id = 1;
-
+  int baud = 921600;
+  const char com[] = "/dev/ttyUSB0";
   AdraApiSerial *adra = new AdraApiSerial(com, baud);
 
   char uuid[24];
@@ -44,6 +48,8 @@ int main(int argc, char *argv[]) {
   printf("get_volt_limit: %d, value = %d %d\n", ret, value_u8[0], value_u8[1]);
   ret = adra->get_curr_limit(id, &value_fp);
   printf("get_curr_limit: %d, value = %f\n", ret, value_fp);
+  ret = adra->get_iwdg_cyc(id, &value_int[0]);
+  printf("get_iwdg_cyc  : %d, value = %d\n", ret, value_int[0]);
   printf("\n");
 
   ret = adra->get_motion_mode(id, value_u8);

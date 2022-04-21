@@ -1,41 +1,43 @@
-/* Copyright 2020 UmbraTek Inc. All Rights Reserved.
+/* Copyright 2022 UmbraTek Inc. All Rights Reserved.
  *
  * Licensed
  *
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
-#ifndef __ADRA_API_SERIAL_H__
-#define __ADRA_API_SERIAL_H__
+#ifndef __ADRA_API_UDP_H__
+#define __ADRA_API_UDP_H__
 
 #include "adra/adra_api_base.h"
-#include "common/socket_serial.h"
+#include "common/socket_udp.h"
 
-class AdraApiSerial : public AdraApiBase {
+class AdraApiUdp : public AdraApiBase {
  public:
   /**
-   * AdraApiSerial is an interface class that controls the ADRA actuator through a serial port. USB-to-RS485 or USB-to-CAN
-   * module hardware is required to connect the computer and the actuator.
+   * AdraApiUdp is an interface class that controls the ADRA actuator through a EtherNet UDP. EtherNet-to-RS485 or
+   * EtherNet-to-CAN module hardware is required to connect the computer and the actuator.
    *
-   * @param   char           com      USB serial port, The default port on Linux is "/dev/ttyUSB0".
-   * @param   int            baud     Baud rate of serial communication.
+   * @param   char           ip       IP address of the EtherNet module.
+   * @param   int            port     UDP port of EtherNet module. The default value is 5001.
    * @param   int            bus_type 0 indicates the actuator that uses the RS485 port.
    *							                    1 indicates the actuator that uses the CAN port.
    *							                    Defaults to 0.
    */
-  AdraApiSerial(const char *com, int baud, int bus_type = BUS_TYPE::UTRC) {
+  AdraApiUdp(char *ip, int port = 5001, int bus_type = BUS_TYPE::UTRC) {
     if (bus_type == BUS_TYPE::UTRC) {
       utrc_decode_ = new UtrcDecode(0xAA, 0x55, 128);
-      socket_fp = new SocketSerial(com, baud, 16, utrc_decode_, 128, 45);
+      socket_fp = new SocketUdp(ip, port, 16, utrc_decode_, 125, 45);
       if (socket_fp->is_error()) {
-        printf("[AdraSeri] Error: socket_file open failed, %s\n", com);
+        printf("[Adra UDP] Error: SocketUdp failed, %s %d\n", ip, port);
         is_error_ = true;
         return;
       }
     } else if (bus_type == BUS_TYPE::UTCC) {
       utcc_decode_ = new UtccDecode(0xAA, 0x55, 128);
-      socket_fp = new SocketSerial(com, baud, 16, utcc_decode_, 128, 45);
+
+      socket_fp = new SocketUdp(ip, port, 16, utcc_decode_, 125, 45);
+
       if (socket_fp->is_error()) {
-        printf("[AdraSeri] Error: socket_file open failed, %s\n", com);
+        printf("[Adra UDP] Error: SocketUdp failed, %s %d\n", ip, port);
         is_error_ = true;
         return;
       }
@@ -43,9 +45,11 @@ class AdraApiSerial : public AdraApiBase {
 
     adrainit(bus_type, socket_fp, 1);
     sleep(1);
+
+    connect_net_module();
   }
 
-  ~AdraApiSerial(void) {
+  ~AdraApiUdp(void) {
     if (socket_fp != NULL) {
       socket_fp->close_port();
       delete socket_fp;
@@ -56,18 +60,12 @@ class AdraApiSerial : public AdraApiBase {
 
   bool is_error(void) { return is_error_; }
 
-  void into_usb_pm(void) {
-    serial_stream_t stream;
-    stream.len = 13;
-    memcpy(stream.data, "# INTO-USB-PM\n", stream.len);
-    socket_fp->write_frame(&stream);
-    sleep(1);
-  }
+  void into_usb_pm(void) {}
 
  private:
   UtrcDecode *utrc_decode_ = NULL;
   UtccDecode *utcc_decode_ = NULL;
-  SocketSerial *socket_fp = NULL;
+  SocketUdp *socket_fp = NULL;
   bool is_error_ = false;
 };
 

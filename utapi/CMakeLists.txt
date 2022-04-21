@@ -9,9 +9,9 @@ add_library(utapi STATIC
     common/preempt_rt.cpp    
     common/socket_serial.cpp
     common/socket_tcp.cpp
+    common/socket_udp.cpp
     base/servo_api_base.cpp
     adra/adra_api_base.cpp
-    adra/adra_api_serial.cpp
 
     base/arm_api_base.cpp
     base/arm_report_status.cpp

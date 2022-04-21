@@ -8,6 +8,7 @@
 #define __SERVO_API_BASE_H__
 
 #include "base/servo_reg.h"
+#include "common/utcc_t.h"
 #include "common/utrc_t.h"
 
 class ServoApiBase {
@@ -16,6 +17,7 @@ class ServoApiBase {
   ServoApiBase(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
   ~ServoApiBase(void);
   void servoinit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
+  int connect_net(void);
 
   int get_uuid_(int id, char uuid[24]);
   int get_sw_version_(int id, char version[12]);
@@ -124,13 +126,15 @@ class ServoApiBase {
   uint8_t bus_type_;
   Socket* socket_fp_ = NULL;
   UtrcClient* utrc_client_ = NULL;
-  utrc_t utrc_tx_;
-  utrc_t utrc_rx_;
+  UtccClient* utcc_client_ = NULL;
+  utrc_t utrc_tx_, utrc_rx_;
+  utcc_t utcc_tx_, utcc_rx_;
+  serial_stream_t rx_stream_;
   pthread_mutex_t mutex_;
 
   void send(uint8_t rw, uint8_t cmd, uint8_t cmd_data_len, uint8_t* cmd_data);
   int pend(uint8_t rx_len, float timeout_s = 0.001);
-  int sendpend(int id, uint8_t rw, const uint8_t cmd[5], uint8_t* tx_data, float timeout_s = 0.02);
+  int sendpend(int id, uint8_t rw, const uint8_t cmd[5], uint8_t* tx_data, float timeout_s = 1);
 
   int get_reg_int8(int id, uint8_t* value, const uint8_t reg[5]);
   int set_reg_int8(int id, uint8_t* value, const uint8_t reg[5]);
@@ -153,8 +157,8 @@ class SERVO_RW {
 
 class BUS_TYPE {
  public:
+  const static uint8_t UTRC = 0;
   const static uint8_t UTCC = 1;
-  const static uint8_t UTRC = 2;
 };
 
 #endif

@@ -20,7 +20,7 @@ void print_help(void) {
 }
 
 /**
- * This is demo to get the state and parameters of the actuator?
+ * This is demo to get the state and parameters of the actuator¡£
  * The actuator ID is 1 and RS485 baud rate is 921600
  * Linux requires super user privileges to run code.
  */

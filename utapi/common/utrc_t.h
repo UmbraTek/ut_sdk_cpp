@@ -10,8 +10,10 @@
 #include <stddef.h>
 #include <stdio.h>
 #include "crc16.h"
+#include "hex_data.h"
 #include "print.h"
 #include "socket.h"
+
 
 class UTRC_ERROR {
  public:
@@ -120,7 +122,7 @@ class UtrcClient {
 
   ~UtrcClient(void) {}
 
-  int connect_device(void) {
+  int connect_device(uint32_t baud = 0xFFFFFFFF) {
     utrc_t tx_utrc;
     tx_utrc.master_id = 0xAA;
     tx_utrc.slave_id = 0x55;
@@ -135,6 +137,7 @@ class UtrcClient {
     tx_utrc.data[4] = 0x7F;
     tx_utrc.data[5] = 0x7F;
     tx_utrc.data[6] = 0x7F;
+    HexData::int32_to_hex_big(baud, &tx_utrc.data[0]);
 
     send(&tx_utrc);
     utrc_t rx_utrc;

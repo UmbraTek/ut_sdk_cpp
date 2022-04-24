@@ -15,7 +15,7 @@ class AdraApiBase : private ServoApiBase {
   AdraApiBase(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
   ~AdraApiBase(void);
   void adrainit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
-  int connect_net_module(void);
+  int connect_net_module(int baud);
   virtual bool is_error(void) = 0;
   virtual void into_usb_pm(void) = 0;
 

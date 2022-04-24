@@ -43,10 +43,13 @@ class DataLinkApiRs485 {
    *                                     longer than that without reset.
    *                               Note: After DataLink is powered on and connected to USB, it needs to be powered on again to
    *                                     connect to TCP or UDP.
+   * @param   int   baud           Set the baud rate of the EtherNet to RS485 module to be the same as that of the actuator.
+   *                               If the baud rate is set to 0xFFFFFFFF, the baud rate of the EtherNet to RS485 module is
+   *                               not set. The default value is 0xFFFFFFFF.
    *
    * @return  DataLinkApiRs485     [return description]
    */
-  DataLinkApiRs485(int connect_type, char* argv1, int argv2, int argv3, int is_reset = 1) {
+  DataLinkApiRs485(int connect_type, char* argv1, int argv2, int argv3, int is_reset = 1, int baud = 0xFFFFFFFF) {
     is_error_ = 0;
 
     if (connect_type == 1) {
@@ -56,7 +59,7 @@ class DataLinkApiRs485 {
       printf("[DataL RS ]Connect To TCP, IP: %s, PORT[TCP UDP]: [%d %d]\n", ip, tcp_port, udp_port);
 
       if (is_reset) reset_net(ip, tcp_port, udp_port);
-      connect_to_tcp(ip, tcp_port);
+      connect_to_tcp(ip, tcp_port, baud);
 
     } else if (connect_type == 2) {
       char* ip = argv1;
@@ -65,7 +68,7 @@ class DataLinkApiRs485 {
       printf("[DataL RS ]Connect To UDP, IP: %s, PORT[TCP UDP]: [%d %d]\n", ip, tcp_port, udp_port);
 
       if (is_reset) reset_net(ip, tcp_port, udp_port);
-      connect_to_udp(ip, udp_port);
+      connect_to_udp(ip, udp_port, baud);
 
     } else if (connect_type == 3) {
       char* com = argv1;
@@ -126,7 +129,7 @@ class DataLinkApiRs485 {
   UtrcClient* utrc_client_ = NULL;
   Socket* socket_fp_ = NULL;
 
-  void connect_to_tcp(char* ip, int port) {
+  void connect_to_tcp(char* ip, int port, int baud) {
     socket_fp_ = new SocketTcp(ip, port, 16, NULL, 125, 45);
     if (socket_fp_->is_error()) {
       printf("[DataL RS] Error: SocketTcp, ip:%s, port:%d\n", ip, port);
@@ -136,14 +139,14 @@ class DataLinkApiRs485 {
 
     socket_fp_->flush();
     utrc_client_ = new UtrcClient(socket_fp_);
-    int ret = utrc_client_->connect_device();
+    int ret = utrc_client_->connect_device(baud);
     if (ret != 0) {
       printf("[DataL RS] Error: connect_net_module %d\n", ret);
       is_error_ = true;
     }
   }
 
-  void connect_to_udp(char* ip, int port) {
+  void connect_to_udp(char* ip, int port, int baud) {
     socket_fp_ = new SocketUdp(ip, port, 16, NULL, 125, 45);
     if (socket_fp_->is_error()) {
       printf("[DataL RS] Error: SocketUdp, ip:%s, port:%d\n", ip, port);
@@ -153,7 +156,7 @@ class DataLinkApiRs485 {
 
     socket_fp_->flush();
     utrc_client_ = new UtrcClient(socket_fp_);
-    int ret = utrc_client_->connect_device();
+    int ret = utrc_client_->connect_device(baud);
     if (ret != 0) {
       printf("[DataL RS] Error: connect_net_module %d\n", ret);
       is_error_ = true;

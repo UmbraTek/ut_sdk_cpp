@@ -28,10 +28,10 @@ int main(int argc, char *argv[]) {
   DataLinkApiRs485 *datalink = NULL;
 
   if (atoi(argv[1]) == 1) {
-    datalink = new DataLinkApiRs485(1, ip, 6001, 5001, 1);
+    datalink = new DataLinkApiRs485(1, ip, 6001, 5001, 1, 921600);
     if (datalink->is_error()) return 0;
   } else if (atoi(argv[1]) == 2) {
-    datalink = new DataLinkApiRs485(2, ip, 6001, 5001, 1);
+    datalink = new DataLinkApiRs485(2, ip, 6001, 5001, 1, 921600);
     if (datalink->is_error()) return 0;
   } else if (atoi(argv[1]) == 3) {
     datalink = new DataLinkApiRs485(3, com, 921600, 0, 1);

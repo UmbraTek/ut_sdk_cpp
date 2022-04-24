@@ -56,6 +56,13 @@ class AdraApiSerial : public AdraApiBase {
 
   bool is_error(void) { return is_error_; }
 
+  /**
+   * If use the USB of the EtherNet to RS485/CAN module to transmit RS485/CAN data,
+   * need to use this function to put the EtherNet to RS485/CAN module into USB transmission mode.
+   * After the EtherNet to RS485/CAN module is powered on, the transmission mode is TCP/UDP by default.
+   * Therefore, only need to set the transmission mode once you are powered on.
+   *
+   */
   void into_usb_pm(void) {
     serial_stream_t stream;
     stream.len = 13;

@@ -17,7 +17,7 @@ AdraApiBase::AdraApiBase(void) {}
 AdraApiBase::AdraApiBase(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id) : ServoApiBase(bus_type, socket_fp, servo_id) {}
 AdraApiBase::~AdraApiBase(void) {}
 void AdraApiBase::adrainit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id) { servoinit(bus_type, socket_fp, servo_id); }
-int AdraApiBase::connect_net_module(void) { return connect_net(); }
+int AdraApiBase::connect_net_module(int baud) { return connect_net(baud); }
 
 int AdraApiBase::get_uuid(int id, char uuid[24]) { return get_uuid_(id, uuid); }
 int AdraApiBase::get_sw_version(int id, char version[12]) { return get_sw_version_(id, version); }

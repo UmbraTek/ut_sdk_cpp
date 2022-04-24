@@ -17,7 +17,7 @@ class ServoApiBase {
   ServoApiBase(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
   ~ServoApiBase(void);
   void servoinit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_id);
-  int connect_net(void);
+  int connect_net(int baud);
 
   int get_uuid_(int id, char uuid[24]);
   int get_sw_version_(int id, char version[12]);

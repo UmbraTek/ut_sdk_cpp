@@ -28,10 +28,10 @@ int main(int argc, char *argv[]) {
   DataLinkApiCan *datalink = NULL;
 
   if (atoi(argv[1]) == 1) {
-    datalink = new DataLinkApiCan(1, ip, 6001, 5001, 1);
+    datalink = new DataLinkApiCan(1, ip, 6001, 5001, 1, 1000000);
     if (datalink->is_error()) return 0;
   } else if (atoi(argv[1]) == 2) {
-    datalink = new DataLinkApiCan(2, ip, 6001, 5001, 1);
+    datalink = new DataLinkApiCan(2, ip, 6001, 5001, 1, 1000000);
     if (datalink->is_error()) return 0;
   } else if (atoi(argv[1]) == 3) {
     datalink = new DataLinkApiCan(3, com, 921600, 0, 1);

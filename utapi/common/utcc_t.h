@@ -133,7 +133,7 @@ class UtccClient {
 
   ~UtccClient(void) {}
 
-  int connect_device(void) {
+  int connect_device(uint32_t baud = 0xFFFFFFFF) {
     utcc_t tx_utcc;
     tx_utcc.head = 0xAA;
     tx_utcc.id = 0x0055;
@@ -148,6 +148,7 @@ class UtccClient {
     tx_utcc.data[4] = 0x7F;
     tx_utcc.data[5] = 0x7F;
     tx_utcc.data[6] = 0x7F;
+    HexData::int32_to_hex_big(baud, &tx_utcc.data[0]);
 
     send(&tx_utcc);
     utcc_t rx_utcc;

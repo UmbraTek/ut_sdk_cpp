@@ -36,8 +36,12 @@ class AdraApiTcp : public AdraApiBase {
    *                    Note: After DataLink is powered on and connected to USB, it needs to be powered on again
    *                          to connect to TCP or UDP.
    * @param   int     udp_port  UDP port of EtherNet module. The default value is 5001.
+   * @param   int     baud      Set the baud rate of the EtherNet to RS485/CAN module to be the same as that of the actuator.
+   *                            If the baud rate is set to 0xFFFFFFFF, the baud rate of the EtherNet to RS485/CAN module is
+   *                            not set. The default value is 0xFFFFFFFF.
    */
-  AdraApiTcp(char *ip, int port = 6001, int bus_type = BUS_TYPE::UTRC, int is_reset = 1, int udp_port = 5001) {
+  AdraApiTcp(char *ip, int port = 6001, int bus_type = BUS_TYPE::UTRC, int is_reset = 1, int udp_port = 5001,
+             int baud = 0xFFFFFFFF) {
     if (bus_type == BUS_TYPE::UTRC) {
       if (is_reset) reset_net_rs485(ip, port, udp_port);
 
@@ -63,7 +67,7 @@ class AdraApiTcp : public AdraApiBase {
     adrainit(bus_type, socket_fp, 1);
     sleep(1);
 
-    connect_net_module();
+    connect_net_module(baud);
   }
 
   ~AdraApiTcp(void) {

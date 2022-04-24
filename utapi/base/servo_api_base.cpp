@@ -41,13 +41,13 @@ void ServoApiBase::servoinit(uint8_t bus_type, Socket* socket_fp, uint8_t servo_
   }
 }
 
-int ServoApiBase::connect_net(void) {
+int ServoApiBase::connect_net(int baud) {
   int ret = -1;
 
   if (bus_type_ == BUS_TYPE::UTRC) {
-    ret = utrc_client_->connect_device();
+    ret = utrc_client_->connect_device(baud);
   } else if (bus_type_ == BUS_TYPE::UTCC) {
-    ret = utcc_client_->connect_device();
+    ret = utcc_client_->connect_device(baud);
   }
 
   if (ret != 0)

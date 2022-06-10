@@ -10,7 +10,9 @@
 #include <math.h>
 #include <sys/mman.h>
 #include <unistd.h>
+
 #include <cstring>
+#include <string>
 #include <thread>
 #include <vector>
 #ifdef linux

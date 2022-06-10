@@ -5,9 +5,11 @@
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
 #include "socket_tcp.h"
+
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
 #include "linuxcvl.h"
 #include "print.h"
 
@@ -76,6 +78,31 @@ int SocketTcp::read_frame(serial_stream_t *data, float timeout_s) {
 }
 
 void SocketTcp::recv_proc(void) {
+  unsigned char ch[rxlen_max_];
+  int ret;
+  while (is_error_ == false) {
+    bzero(ch, rxlen_max_);
+    ret = recv(fp_, ch, rxlen_max_, 0);
+    if (ret <= 0) {
+      close(fp_);
+      printf("[SockeTcp] recv_proc exit\n");
+      pthread_exit(0);
+      return;
+    }
+
+    if (decode_ != NULL && is_decode_) {
+      decode_->parse_put(ch, ret, rx_que_);
+    } else {
+      rx_stream_.len = ret;
+      memcpy(rx_stream_.data, ch, rx_stream_.len);
+      rx_que_->push_back(&rx_stream_);
+    }
+    // Print::hex("[Sock TCP] recv: ", rx_stream_.data, rx_stream_.len);
+  }
+}
+
+/*
+void SocketTcp::recv_proc(void) {
   while (is_error_ == false) {
     bzero(rx_stream_.data, rxlen_max_);
     rx_stream_.len = recv(fp_, rx_stream_.data, rxlen_max_, 0);
@@ -93,4 +120,4 @@ void SocketTcp::recv_proc(void) {
     }
     // Print::hex("[Sock TCP] recv: ", rx_stream_.data, rx_stream_.len);
   }
-}
+}*/

@@ -8,7 +8,17 @@
 #include "utapi/utra/utra_flxie_api.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.34";
+  int opt = 0;
+  char ip[64];
+  std::string port_name = "192.168.1.14";
+  while ((opt = getopt(argc, argv, "i:m:")) != -1) {
+    switch (opt) {
+      case 'i':
+        strcpy(ip, std::string(optarg).data());
+        break;
+    }
+  }
+
   UtraApiTcp *ubot = new UtraApiTcp(ip);
   UtraFlxiE2Api *fixie = new UtraFlxiE2Api(ubot, 101);
 
@@ -19,7 +29,7 @@ int main(int argc, char *argv[]) {
   printf("get_sw_version: %d, version = %s\n", ret, version);
   ret = fixie->get_hw_version(version);
   printf("get_hw_version: %d, version = %s\n", ret, version);
-  printf(" ");
+  printf("\n");
 
   int min, max;
   float value_fp32;
@@ -29,7 +39,7 @@ int main(int argc, char *argv[]) {
   printf("get_volt_limit: %d, value = %d %d\n", ret, min, max);
   ret = fixie->get_curr_limit(&value_fp32);
   printf("get_curr_limit: %d, value = %f\n", ret, value_fp32);
-  printf(" ");
+  printf("\n");
 
   uint8_t value_u8;
   ret = fixie->get_motion_mode(&value_u8);
@@ -46,7 +56,7 @@ int main(int argc, char *argv[]) {
   printf("get_bus_curr     : %d, value = %.1f\n", ret, value_fp32);
   ret = fixie->get_error_code(&value_u8);
   printf("get_error_code   : %d, value = %d\n", ret, value_u8);
-  printf(" ");
+  printf("\n");
 
   ret = fixie->get_vel_limit_min(&value_fp32);
   printf("get_vel_limit_min : %d, value = %f\n", ret, value_fp32);
@@ -56,7 +66,7 @@ int main(int argc, char *argv[]) {
   printf("get_tau_limit_min : %d, value = %f\n", ret, value_fp32);
   ret = fixie->get_tau_limit_max(&value_fp32);
   printf("get_tau_limit_max : %d, value = %f\n", ret, value_fp32);
-  printf(" ");
+  printf("\n");
 
   ret = fixie->get_pos_target(&value_fp32);
   printf("get_pos_target : %d, value = %f\n", ret, value_fp32);

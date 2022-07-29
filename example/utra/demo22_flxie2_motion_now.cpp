@@ -8,7 +8,17 @@
 #include "utapi/utra/utra_flxie_api.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.34";
+  int opt = 0;
+  char ip[64];
+  std::string port_name = "192.168.1.14";
+  while ((opt = getopt(argc, argv, "i:m:")) != -1) {
+    switch (opt) {
+      case 'i':
+        strcpy(ip, std::string(optarg).data());
+        break;
+    }
+  }
+
   UtraApiTcp *ubot = new UtraApiTcp(ip);
   UtraFlxiE2Api *fixie = new UtraFlxiE2Api(ubot, 101);
 

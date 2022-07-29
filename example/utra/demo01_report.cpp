@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
   int opt = 0;
   uint8_t mode = 1;
   char ip[64];
-  std::string port_name = "192.168.1.89";
+  std::string port_name = "192.168.1.14";
 
   while ((opt = getopt(argc, argv, "i:m:")) != -1) {
     switch (opt) {

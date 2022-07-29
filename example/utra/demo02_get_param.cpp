@@ -8,7 +8,16 @@
 #include "utapi/utra/utra_api_tcp.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.175";
+  int opt = 0;
+  char ip[64];
+  std::string port_name = "192.168.1.14";
+  while ((opt = getopt(argc, argv, "i:m:")) != -1) {
+    switch (opt) {
+      case 'i':
+        strcpy(ip, std::string(optarg).data());
+        break;
+    }
+  }
 
   UtraApiTcp *ubot = new UtraApiTcp(ip);
 
@@ -26,7 +35,9 @@ int main(int argc, char *argv[]) {
   ret = ubot->get_hw_version(version);
   printf("get_hw_version : %d, version = %s\n", ret, version);
   ret = ubot->get_axis(&axis);
-  printf("get_axis       : %d, axis = %d\n", ret, axis);
+  printf("get_axis       : %d, axis    = %d\n", ret, axis);
+  ret = ubot->get_sys_autorun(&value_u8[0]);
+  printf("get_sys_autorun: %d, autorun = %d\n", ret, value_u8[0]);
   printf("\n");
 
   ret = ubot->get_motion_mode(value_u8);
@@ -38,7 +49,7 @@ int main(int argc, char *argv[]) {
   ret = ubot->get_error_code(value_u8);
   printf("get_error_code   : %d, value = %d %d\n", ret, value_u8[0], value_u8[1]);
   ret = ubot->get_servo_msg(value_u8);
-  Print::nvect("get_servo_msg    :", value_u8, axis * 2);
+  Print::nvect("get_servo_msg    : ", value_u8, axis * 2);
   ret = ubot->get_motion_status(value_u8);
   printf("get_motion_status: %d, value = %d\n", ret, value_u8[0]);
   ret = ubot->get_cmd_num(&value_int);
@@ -67,6 +78,18 @@ int main(int argc, char *argv[]) {
   Print::nvect("get_tcp_target_pos   : ", value_fp, 6);
   ret = ubot->get_joint_target_pos(value_fp);
   Print::nvect("get_joint_target_pos :", value_fp, axis);
+
+  float pos[6] = {300, -300, 400, 3.14 * 0.5, 0, 3.14 * 0.5};
+  float joint[7] = {1.8988, 0.1065, -1.9738, -2.0803, -0.3281, 0, 0};
+  float joints[7];
+
+  ret = ubot->get_ik(pos, joint, joints);
+  printf("get_ik: %d, ", ret);
+  Print::nvect(" ", joints, axis);
+
+  ret = ubot->get_fk(joint, pos);
+  printf("get_fk: %d, ", ret);
+  Print::nvect(" ", pos, 6);
 
   return 0;
 }

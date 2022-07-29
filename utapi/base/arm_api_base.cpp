@@ -5,7 +5,9 @@
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
 #include "base/arm_api_base.h"
+
 #include <unistd.h>
+
 #include "common/hex_data.h"
 
 ArmApiBase::ArmApiBase(void) { pthread_mutex_init(&mutex_, NULL); }
@@ -122,6 +124,26 @@ int ArmApiBase::set_reg_fp32(float* value, const uint8_t reg[5], int n) {
   return ret;
 }
 
+int ArmApiBase::get_reg_fp32_fp32(const uint8_t reg[5], float* txdate, int tx_n, float* rxdate, int rx_n) {
+  uint8_t data[4 * tx_n];
+  HexData::fp32_to_hex_big(txdate, data, tx_n);
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::R, reg, data);
+  HexData::hex_to_fp32_big(&utrc_rx_.data[0], rxdate, rx_n);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
+int ArmApiBase::get_reg_int8_fp32(const uint8_t reg[5], float* txdate, int tx_n, float* rxdate, int rx_n) {
+  uint8_t data[4 * tx_n];
+  HexData::fp32_to_hex_big(txdate, data, tx_n);
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::R, reg, data);
+  for (int i = 0; i < rx_n; i++) rxdate[i] = (int8_t)utrc_rx_.data[i];
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
 /************************************************************
  *                     Basic Api
  ************************************************************/
@@ -129,6 +151,8 @@ int ArmApiBase::get_axis(uint8_t* axis) { return get_reg_int8(axis, reg_->UBOT_A
 int ArmApiBase::get_uuid(uint8_t uuid[17]) { return get_reg_int8(uuid, reg_->UUID); }
 int ArmApiBase::get_sw_version(uint8_t version[20]) { return get_reg_int8(version, reg_->SW_VERSION); }
 int ArmApiBase::get_hw_version(uint8_t version[20]) { return get_reg_int8(version, reg_->HW_VERSION); }
+int ArmApiBase::get_sys_autorun(uint8_t* autorun) { return get_reg_int8(autorun, reg_->SYS_AUTORUN); }
+int ArmApiBase::set_sys_autorun(uint8_t autorun) { return set_reg_int8(&autorun, reg_->SYS_AUTORUN); }
 int ArmApiBase::shutdown_system(void) { return set_reg_int8((uint8_t*)&reg_->SYS_SHUTDOWN[0], reg_->SYS_SHUTDOWN); }
 int ArmApiBase::reset_err(void) { return set_reg_int8((uint8_t*)&reg_->RESET_ERR[0], reg_->RESET_ERR); }
 int ArmApiBase::reboot_system(void) { return set_reg_int8((uint8_t*)&reg_->SYS_REBOOT[0], reg_->SYS_REBOOT); }
@@ -179,9 +203,6 @@ int ArmApiBase::moveto_cartesian_lineb(float* mvpose, float mvvelo, float mvacc,
   return set_reg_fp32(data, reg_->MOVET_LINEB, 10);
 }
 
-int ArmApiBase::moveto_cartesian_p2p(void) { return 0; }
-int ArmApiBase::moveto_cartesian_p2pb(void) { return 0; }
-
 int ArmApiBase::moveto_cartesian_circle(float* pose1, float* pose2, float mvvelo, float mvacc, float mvtime, float percent) {
   float data[16];
   memcpy(data, pose1, 6 * 4);
@@ -193,8 +214,46 @@ int ArmApiBase::moveto_cartesian_circle(float* pose1, float* pose2, float mvvelo
   return set_reg_fp32(data, reg_->MOVET_CIRCLE, 16);
 }
 
-int ArmApiBase::moveto_joint_line(void) { return 0; }
-int ArmApiBase::moveto_joint_lineb(void) { return 0; }
+int ArmApiBase::moveto_cartesian_p2p(float* mvpose, float mvvelo, float mvacc, float mvtime) {
+  float data[6 + 3];
+  memcpy(data, mvpose, 6 * 4);
+  data[6] = mvvelo;
+  data[7] = mvacc;
+  data[8] = mvtime;
+  return set_reg_fp32(data, reg_->MOVET_P2P, 9);
+}
+
+int ArmApiBase::moveto_cartesian_p2pb(void) { return 0; }
+
+int ArmApiBase::moveto_joint_line(float* mvjoint, float mvvelo, float mvacc, float mvtime) {
+  float data[axis_ + 3];
+  memcpy(data, mvjoint, axis_ * 4);
+  data[axis_] = mvvelo;
+  data[axis_ + 1] = mvacc;
+  data[axis_ + 2] = mvtime;
+  return set_reg_fp32(data, reg_->MOVEJ_LINE, axis_ + 3);
+}
+
+int ArmApiBase::moveto_joint_lineb(float* mvjoint, float mvvelo, float mvacc, float mvtime, float mvradii) {
+  float data[axis_ + 4];
+  memcpy(data, mvjoint, axis_ * 4);
+  data[axis_] = mvvelo;
+  data[axis_ + 1] = mvacc;
+  data[axis_ + 2] = mvtime;
+  data[axis_ + 3] = mvradii;
+  return set_reg_fp32(data, reg_->MOVEJ_LINEB, axis_ + 4);
+}
+
+int ArmApiBase::moveto_joint_circle(float* mvjoint1, float* mvjoint2, float mvvelo, float mvacc, float mvtime, float percent) {
+  float data[axis_ * 2 + 4];
+  memcpy(data, mvjoint1, axis_ * 4);
+  memcpy(&data[axis_], mvjoint2, axis_ * 4);
+  data[axis_ * 2] = mvvelo;
+  data[axis_ * 2 + 1] = mvacc;
+  data[axis_ * 2 + 2] = mvtime;
+  data[axis_ * 2 + 3] = percent;
+  return set_reg_fp32(data, reg_->MOVEJ_CIRCLE, axis_ * 2 + 4);
+}
 
 int ArmApiBase::moveto_joint_p2p(float* mvjoint, float mvvelo, float mvacc, float mvtime) {
   float data[axis_ + 3];
@@ -204,8 +263,6 @@ int ArmApiBase::moveto_joint_p2p(float* mvjoint, float mvvelo, float mvacc, floa
   data[axis_ + 2] = mvtime;
   return set_reg_fp32(data, reg_->MOVEJ_P2P, axis_ + 3);
 }
-
-int ArmApiBase::moveto_joint_circle(void) { return 0; }
 
 int ArmApiBase::moveto_home_p2p(float mvvelo, float mvacc, float mvtime) {
   float data[3] = {mvvelo, mvacc, mvtime};
@@ -300,8 +357,13 @@ int ArmApiBase::get_tcp_actual_pos(float* pos) { return 0; }
 int ArmApiBase::get_joint_target_pos(float* pos) { return get_reg_fp32(pos, reg_->JOINT_POS_CURR, axis_); }
 int ArmApiBase::get_joint_actual_pos(float* pos) { return 0; }
 
-int ArmApiBase::get_ik(void) { return 0; }
-int ArmApiBase::get_fk(void) { return 0; }
+int ArmApiBase::get_ik(float* pose, float* qnear, float* joints) {
+  float tx_date[axis_ + 6];
+  memcpy(&tx_date[0], pose, 6 * 4);
+  memcpy(&tx_date[6], qnear, axis_ * 4);
+  return get_reg_fp32_fp32(reg_->CAL_IK, tx_date, 6 + axis_, joints, axis_);
+}
+int ArmApiBase::get_fk(float* joints, float* pose) { return get_reg_fp32_fp32(reg_->CAL_FK, joints, axis_, pose, 6); }
 int ArmApiBase::is_joint_limit(void) { return 0; }
 int ArmApiBase::is_tcp_limit(void) { return 0; }
 

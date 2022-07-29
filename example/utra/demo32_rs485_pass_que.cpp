@@ -7,7 +7,17 @@
 #include "utapi/utra/utra_api_tcp.h"
 
 int main(int argc, char *argv[]) {
-  char ip[] = "192.168.1.14";
+  int opt = 0;
+  char ip[64];
+  std::string port_name = "192.168.1.14";
+  while ((opt = getopt(argc, argv, "i:m:")) != -1) {
+    switch (opt) {
+      case 'i':
+        strcpy(ip, std::string(optarg).data());
+        break;
+    }
+  }
+
   UtraApiTcp *ubot = new UtraApiTcp(ip);
 
   int ret = ubot->reset_err();

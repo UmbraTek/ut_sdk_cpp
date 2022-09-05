@@ -75,6 +75,7 @@ class SERVO_REG {
   uint8_t CPOS_TARGET[5] = {0x60, ' ', ' ', 0, ' '};        // startId endId pos*Axis
   uint8_t CTAU_TARGET[5] = {0x61, ' ', ' ', 0, ' '};        // startId endId tau*Axis
   uint8_t CPOSTAU_TARGET[5] = {0x62, ' ', ' ', 0, ' '};     // startId endId (pos+tau)*Axis
+  uint8_t CPOSVEL_TARGET[5] = {0x64, ' ', ' ', 0, ' '};     // startId endId (pos+vel)*Axis
   uint8_t SPOSTAU_CURRENT[5] = {0x68, 0, 8 + 1, ' ', ' '};  // Gets the current position and torque of an actuator
   uint8_t CPOSTAU_CURRENT[5] = {0x69, 2, 8 + 1, ' ', ' '};  // startId endId
 };

@@ -24,16 +24,21 @@ add_executable(demo4_get_param
 target_link_libraries(demo4_get_param utapi pthread rt m)
 
 add_executable(demo5_motion_cpos
-demo5_motion_cpos.cpp
+	demo5_motion_cpos.cpp
 )
 target_link_libraries(demo5_motion_cpos utapi pthread rt m)
 
 add_executable(demo6_motion_ctau
-demo6_motion_ctau.cpp
+	demo6_motion_ctau.cpp
 )
 target_link_libraries(demo6_motion_ctau utapi pthread rt m)
 
 add_executable(demo7_motion_cpostau
-demo7_motion_cpostau.cpp
+	demo7_motion_cpostau.cpp
 )
 target_link_libraries(demo7_motion_cpostau utapi pthread rt m)
+
+add_executable(demo8_motion_cposvel
+	demo8_motion_cposvel.cpp
+)
+target_link_libraries(demo8_motion_cposvel utapi pthread rt m)

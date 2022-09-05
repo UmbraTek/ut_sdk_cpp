@@ -115,6 +115,7 @@ class ServoApiBase {
   int set_cpos_target_(uint8_t sid, uint8_t eid, float* pos);
   int set_ctau_target_(uint8_t sid, uint8_t eid, float* tau);
   int set_cpostau_target_(uint8_t sid, uint8_t eid, float* pos, float* tau);
+  int set_cposvel_target_(uint8_t sid, uint8_t eid, float* pos, float* vel);
   int get_spostau_current_(int id, int* num, float* pos, float* tau);
   int get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
 

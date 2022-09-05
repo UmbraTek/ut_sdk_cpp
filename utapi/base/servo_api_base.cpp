@@ -5,7 +5,9 @@
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
 #include "base/servo_api_base.h"
+
 #include <unistd.h>
+
 #include "common/hex_data.h"
 
 ServoApiBase::ServoApiBase(void) { pthread_mutex_init(&mutex_, NULL); }
@@ -408,6 +410,28 @@ int ServoApiBase::set_cpostau_target_(uint8_t sid, uint8_t eid, float* pos, floa
   id_ = 0x55;
   utrc_tx_.slave_id = id_;
   send(SERVO_RW::W, reg_.CPOSTAU_TARGET[0], 4 * num * 2 + 2, data);
+  pthread_mutex_unlock(&mutex_);
+  return 0;
+}
+
+int ServoApiBase::set_cposvel_target_(uint8_t sid, uint8_t eid, float* pos, float* vel) {
+  int num = (eid - sid + 1);
+  float posvel[num * 2];
+  for (int i = 0; i < num; i++) {
+    posvel[i * 2] = pos[i];
+    posvel[i * 2 + 1] = vel[i];
+  }
+
+  uint8_t data[4 * num * 2 + 2];
+  data[0] = sid;
+  data[1] = eid;
+  HexData::fp32_to_hex_big(posvel, &data[2], num * 2);
+  reg_.CPOSVEL_TARGET[3] = 4 * num * 2 + 2;
+
+  pthread_mutex_lock(&mutex_);
+  id_ = 0x55;
+  utrc_tx_.slave_id = id_;
+  send(SERVO_RW::W, reg_.CPOSVEL_TARGET[0], 4 * num * 2 + 2, data);
   pthread_mutex_unlock(&mutex_);
   return 0;
 }

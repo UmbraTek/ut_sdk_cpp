@@ -120,6 +120,9 @@ int AdraApiBase::set_ctau_target(uint8_t sid, uint8_t eid, float* tau) { return 
 int AdraApiBase::set_cpostau_target(uint8_t sid, uint8_t eid, float* pos, float* tau) {
   return set_cpostau_target_(sid, eid, pos, tau);
 }
+int AdraApiBase::set_cposvel_target(uint8_t sid, uint8_t eid, float* pos, float* vel) {
+  return set_cposvel_target_(sid, eid, pos, vel);
+}
 int AdraApiBase::get_spostau_current(uint8_t id, int* num, float* pos, float* tau) {
   return get_spostau_current(id, num, pos, tau);
 }

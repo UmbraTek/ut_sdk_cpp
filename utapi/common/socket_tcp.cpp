@@ -96,7 +96,9 @@ void SocketTcp::recv_proc(void) {
       rx_stream_.len = ret;
       memcpy(rx_stream_.data, ch, rx_stream_.len);
       rx_que_->push_back(&rx_stream_);
+      // printf("[Sock TCP] recv: %d\n", ret);
     }
+
     // Print::hex("[Sock TCP] recv: ", rx_stream_.data, rx_stream_.len);
   }
 }

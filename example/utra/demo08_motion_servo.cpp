@@ -48,5 +48,22 @@ int main(int argc, char *argv[]) {
   ret = ubot->moveto_servo_joint(3, frames, time);
   printf("moveto_servo_joint  : %d\n", ret);
 
+  float pos1[6] = {418, 56, 186, 3.14, 0.0, 1.5};
+  float pos2[6] = {418, -256, 186, 3.14, 0.0, 1.5};
+  float pos3[6] = {418, -256, 486, 3.14, 0.0, 1.5};
+  float time2[3] = {20, 20, 20};
+  float pose[18];
+  for (int j = 0; j < 6; j++) pose[0 + j] = pos1[j];
+  for (int j = 0; j < 6; j++) pose[6 + j] = pos2[j];
+  for (int j = 0; j < 6; j++) pose[12 + j] = pos3[j];
+
+  ret = ubot->plan_sleep(5);
+  ret = ubot->moveto_cartesian_servo(3, pose, time2);
+  printf("moveto_cartesian_servo  : %d\n", ret);
+  ret = ubot->moveto_cartesian_servo(3, pose, time2);
+  printf("moveto_cartesian_servo  : %d\n", ret);
+  ret = ubot->moveto_cartesian_servo(3, pose, time2);
+  printf("moveto_cartesian_servo  : %d\n", ret);
+
   return 0;
 }

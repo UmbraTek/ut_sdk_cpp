@@ -269,16 +269,11 @@ int ArmApiBase::moveto_home_p2p(float mvvelo, float mvacc, float mvtime) {
   return set_reg_fp32(data, reg_->MOVEJ_HOME, 3);
 }
 
-int ArmApiBase::moveto_servoj(float* mvjoint, float mvvelo, float mvacc, float mvtime) {
-  float data[axis_ + 3];
-  memcpy(data, mvjoint, axis_ * 4);
-  data[axis_] = mvvelo;
-  data[axis_ + 1] = mvacc;
-  data[axis_ + 2] = mvtime;
-  return set_reg_fp32(data, reg_->MOVE_SERVOJ, axis_ + 3);
+int ArmApiBase::moveto_servo_joint(int frames_num, float* mvjoint, float* mvtime) {
+  return moveto_joint_servo(frames_num, mvjoint, mvtime);
 }
 
-int ArmApiBase::moveto_servo_joint(int frames_num, float* mvjoint, float* mvtime) {
+int ArmApiBase::moveto_joint_servo(int frames_num, float* mvjoint, float* mvtime) {
   int data_len = frames_num * (axis_ + 1);
   float txdata[data_len];
 
@@ -289,12 +284,33 @@ int ArmApiBase::moveto_servo_joint(int frames_num, float* mvjoint, float* mvtime
     txdata[i * (axis_ + 1) + axis_] = mvtime[i];
   }
 
-  uint8_t data[4 * frames_num + 4];
+  uint8_t data[4 * data_len + 4];
   HexData::int32_to_hex_big(&frames_num, &data[0], 1);
   HexData::fp32_to_hex_big(txdata, &data[4], data_len);
-  reg_->MOVES_JOINT[3] = (data_len + 1) * 4;
+  reg_->MOVEJ_SERVO[3] = (data_len + 1) * 4;
   pthread_mutex_lock(&mutex_);
-  int ret = sendpend(ARM_RW::W, reg_->MOVES_JOINT, data);
+  int ret = sendpend(ARM_RW::W, reg_->MOVEJ_SERVO, data);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
+int ArmApiBase::moveto_cartesian_servo(int frames_num, float* mvpose, float* mvtime) {
+  int data_len = frames_num * (6 + 1);
+  float txdata[data_len];
+
+  for (int i = 0; i < frames_num; i++) {
+    for (int j = 0; j < 6; j++) {
+      txdata[i * (6 + 1) + j] = mvpose[i * 6 + j];
+    }
+    txdata[i * (6 + 1) + 6] = mvtime[i];
+  }
+
+  uint8_t data[4 * data_len + 4];
+  HexData::int32_to_hex_big(&frames_num, &data[0], 1);
+  HexData::fp32_to_hex_big(txdata, &data[4], data_len);
+  reg_->MOVET_SERVO[3] = (data_len + 1) * 4;
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::W, reg_->MOVET_SERVO, data);
   pthread_mutex_unlock(&mutex_);
   return ret;
 }
@@ -331,6 +347,22 @@ int ArmApiBase::set_collis_sens(uint8_t sens) { return set_reg_int8(&sens, reg_-
 
 int ArmApiBase::get_teach_sens(uint8_t* sens) { return get_reg_int8(sens, reg_->TEACH_SENS); }
 int ArmApiBase::set_teach_sens(uint8_t sens) { return set_reg_int8(&sens, reg_->TEACH_SENS); }
+
+int ArmApiBase::get_limit_fun(int* fun) { return get_reg_int32(fun, reg_->LIMIT_FUN); }
+int ArmApiBase::set_limit_fun(int fun) { return set_reg_int32(&fun, reg_->LIMIT_FUN); }
+
+int ArmApiBase::set_limit_angle_enable(int en) {
+  if (en)
+    return set_limit_fun(0x00010001);
+  else
+    return set_limit_fun(0x00010000);
+}
+int ArmApiBase::set_limit_geometry_enable(int en) {
+  if (en)
+    return set_limit_fun(0x00020002);
+  else
+    return set_limit_fun(0x00020000);
+}
 
 int ArmApiBase::get_friction(uint8_t axis, float* fri) {
   uint8_t tx_data[2] = {reg_->FRICTION[0], axis};

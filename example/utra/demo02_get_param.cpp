@@ -91,5 +91,18 @@ int main(int argc, char *argv[]) {
   printf("get_fk: %d, ", ret);
   Print::nvect(" ", pos, 6);
 
+  ret = ubot->get_limit_fun(&value_int);
+  printf("get_limit_fun : %d, value = 0x%x\n", ret, value_int);
+  ret = ubot->set_limit_angle_enable(0);
+  printf("set_limit_pos : %d\n", ret);
+  ret = ubot->set_limit_geometry_enable(0);
+  printf("set_limit_gc  : %d\n", ret);
+  ret = ubot->get_limit_fun(&value_int);
+  printf("get_limit_fun : %d, value = 0x%x\n", ret, value_int);
+  ret = ubot->set_limit_angle_enable(1);
+  printf("set_limit_pos : %d\n", ret);
+  ret = ubot->set_limit_geometry_enable(1);
+  printf("set_limit_gc  : %d\n", ret);
+
   return 0;
 }

@@ -54,8 +54,9 @@ class ArmApiBase {
   int moveto_joint_p2p(float* mvjoint, float mvvelo, float mvacc, float mvtime);
   int moveto_joint_circle(float* mvjoint1, float* mvjoint2, float mvvelo, float mvacc, float mvtime, float percent);
   int moveto_home_p2p(float mvvelo, float mvacc, float mvtime);
-  int moveto_servoj(float* mvjoint, float mvvelo, float mvacc, float mvtime);
   int moveto_servo_joint(int frames_num, float* mvjoint, float* mvtime);
+  int moveto_joint_servo(int frames_num, float* mvjoint, float* mvtime);
+  int moveto_cartesian_servo(int frames_num, float* mvpose, float* mvtime);
   int move_sleep(float time);
   int plan_sleep(float time);
 
@@ -77,6 +78,10 @@ class ArmApiBase {
   int set_collis_sens(uint8_t sens);
   int get_teach_sens(uint8_t* sens);
   int set_teach_sens(uint8_t sens);
+  int get_limit_fun(int* fun);
+  int set_limit_fun(int fun);
+  int set_limit_angle_enable(int en);
+  int set_limit_geometry_enable(int en);
   int get_tcp_target_pos(float* pos);
   int get_tcp_actual_pos(float* pos);
   int get_joint_target_pos(float* pos);

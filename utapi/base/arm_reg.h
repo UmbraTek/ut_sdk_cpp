@@ -53,8 +53,8 @@ class ARM_REG {
   const uint8_t MoveJ_P2PB[5] = {0x39, ' ', ' ', ' ', ' '};
   const uint8_t MOVEJ_HOME[5] = {0x3A, ' ', ' ', 12, 4};
   const uint8_t MOVE_SLEEP[5] = {0x3B, ' ', ' ', 4, 4};
-  const uint8_t MOVE_SERVOJ[5] = {0x3C, ' ', ' ', (uint8_t)((AXIS + 3) * 4), 4};
-  uint8_t MOVES_JOINT[5] = {0x3D, ' ', ' ', 0x55, 4};
+  uint8_t MOVEJ_SERVO[5] = {0x3D, ' ', ' ', 0x55, 4};
+  uint8_t MOVET_SERVO[5] = {0x3E, ' ', ' ', 0x55, 4};
   const uint8_t PLAN_SLEEP[5] = {0x3F, ' ', ' ', 4, 4};
 
   const uint8_t TCP_JERK[5] = {0x40, 0, 4, 4, 4};
@@ -66,6 +66,7 @@ class ARM_REG {
   const uint8_t GRAVITY_DIR[5] = {0x46, 0, 12, 12, 0};
   const uint8_t COLLIS_SENS[5] = {0x47, 0, 1, 1, 0};
   const uint8_t TEACH_SENS[5] = {0x48, 0, 1, 1, 0};
+  const uint8_t LIMIT_FUN[5] = {0x49, 0, 4, 4, 0};
 
   const uint8_t TCP_POS_CURR[5] = {0x50, 0, 24, ' ', ' '};
   const uint8_t JOINT_POS_CURR[5] = {0x51, 0, (uint8_t)(AXIS * 4), ' ', ' '};

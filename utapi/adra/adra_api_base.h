@@ -43,6 +43,8 @@ class AdraApiBase : private ServoApiBase {
   int set_volt_limit(int id, uint8_t min, uint8_t max);
   int get_curr_limit(int id, float* curr);
   int set_curr_limit(int id, float curr);
+  int get_brake_delay(int id, uint16_t* ontime, uint16_t* offtime);
+  int set_brake_delay(int id, uint16_t ontime, uint16_t offtime);
 
   int get_motion_mode(int id, uint8_t* mode);
   int get_motion_enable(int id, uint8_t* able);

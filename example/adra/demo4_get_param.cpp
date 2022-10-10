@@ -163,6 +163,12 @@ int main(int argc, char *argv[]) {
   printf("get_tau_limit_max : %d, value = %f\n", ret, value_fp);
   ret = adra->get_tau_limit_diff(id, &value_fp);
   printf("get_tau_limit_diff: %d, value = %f\n", ret, value_fp);
+
+  uint16_t ontime, offtime;
+  ret = adra->get_brake_delay(id, &ontime, &offtime);
+  printf("get_brake_delay: %d, value = %d %d\n", ret, ontime, offtime);
+  ret = adra->set_brake_delay(id, ontime, offtime);
+  printf("set_brake_delay: %d\n", ret);
   printf("\n");
 
   ret = adra->get_pos_target(id, &value_fp);

@@ -44,6 +44,8 @@ class ServoApiBase {
   int set_volt_limit_(int id, uint8_t min, uint8_t max);
   int get_curr_limit_(int id, float* curr);
   int set_curr_limit_(int id, float curr);
+  int get_brake_delay_(int id, uint16_t* ontime, uint16_t* offtime);
+  int set_brake_delay_(int id, uint16_t ontime, uint16_t offtime);
 
   int get_motion_mode_(int id, uint8_t* mode);
   int set_motion_mode_(int id, uint8_t mode);

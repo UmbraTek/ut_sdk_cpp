@@ -43,6 +43,8 @@ int AdraApiBase::get_volt_limit(int id, uint8_t* min, uint8_t* max) { return get
 int AdraApiBase::set_volt_limit(int id, uint8_t min, uint8_t max) { return set_volt_limit_(id, min, max); }
 int AdraApiBase::get_curr_limit(int id, float* curr) { return get_curr_limit_(id, curr); }
 int AdraApiBase::set_curr_limit(int id, float curr) { return set_curr_limit_(id, curr); }
+int AdraApiBase::get_brake_delay(int id, uint16_t* ontime, uint16_t* offtime) { return get_brake_delay_(id, ontime, offtime); }
+int AdraApiBase::set_brake_delay(int id, uint16_t ontime, uint16_t offtime) { return set_brake_delay_(id, ontime, offtime); }
 
 int AdraApiBase::get_motion_mode(int id, uint8_t* mode) { return get_motion_mode_(id, mode); }
 int AdraApiBase::get_motion_enable(int id, uint8_t* able) { return get_motion_enable_(id, able); }

@@ -236,6 +236,24 @@ int ServoApiBase::get_volt_limit_(int id, uint8_t* min, uint8_t* max) { return g
 int ServoApiBase::set_volt_limit_(int id, uint8_t min, uint8_t max) { return set_reg_int8(id, min, max, reg_.VOLT_LIMIT); }
 int ServoApiBase::get_curr_limit_(int id, float* curr) { return get_reg_fp32(id, curr, reg_.CURR_LIMIT); }
 int ServoApiBase::set_curr_limit_(int id, float curr) { return set_reg_fp32(id, curr, reg_.CURR_LIMIT); }
+int ServoApiBase::get_brake_delay_(int id, uint16_t* ontime, uint16_t* offtime) {
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(id, SERVO_RW::R, reg_.BRAKE_DELAY, NULL);
+  *ontime = HexData::hex_to_uint16_big(&rx_stream_.data[0]);
+  *offtime = HexData::hex_to_uint16_big(&rx_stream_.data[2]);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
+int ServoApiBase::set_brake_delay_(int id, uint16_t ontime, uint16_t offtime) {
+  uint8_t data[4];
+  HexData::int16_to_hex_big(ontime, &data[0]);
+  HexData::int16_to_hex_big(offtime, &data[2]);
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(id, SERVO_RW::W, reg_.BRAKE_DELAY, data);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
 
 // motion model
 int ServoApiBase::get_motion_mode_(int id, uint8_t* mode) { return get_reg_int8(id, mode, reg_.MOTION_MODE); }

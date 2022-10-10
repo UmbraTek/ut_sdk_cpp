@@ -30,6 +30,7 @@ class SERVO_REG {
   const uint8_t TEMP_LIMIT[5] = {0x18, 0, 2, 2, 0};
   const uint8_t VOLT_LIMIT[5] = {0x19, 0, 2, 2, 0};
   const uint8_t CURR_LIMIT[5] = {0x1A, 0, 4, 4, 0};
+  const uint8_t BRAKE_DELAY[5] = {0x1B, 0, 4, 4, 0};
   const uint8_t BRAKE_PWM[5] = {0x1F, 0, 1, 1, 0};
 
   const uint8_t MOTION_MODE[5] = {0x20, 0, 1, 1, 0};

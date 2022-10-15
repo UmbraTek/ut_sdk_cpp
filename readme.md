@@ -29,9 +29,10 @@ $ make -j4
 ## Example
 
 * UTRA
-	 
-[UTRA/OPTI SDK Programming Guide](https://github.com/UmbraTek/ut_sdk_cpp/tree/master/utapi/utra/readme.md)
 	
+
+	[UTRA/OPTI SDK Programming Guide](https://github.com/UmbraTek/ut_sdk_cpp/tree/master/utapi/utra/readme.md)
+
 	| Demo                                                         | Describe                                                     |
 	| ------------------------------------------------------------ | ------------------------------------------------------------ |
 	| [demo01_report.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/utra/demo01_report.cpp) | This is a demo to print the data of three real-time automatically reported ports. |
@@ -58,10 +59,8 @@ $ make -j4
 
 * ADRA
 
-    
-
-    | Demo                                                         | Describe                                                     |
-    | ------------------------------------------------------------ | ------------------------------------------------------------ |
+  | Demo                                                         | Describe                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
     | [demo1_motion_position.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo1_motion_position.cpp) | This demo is to control the device to move to the specified position. |
     | [demo2_motion_velocity.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo2_motion_velocity.cpp) | This demo controls the actuator running at a constant speed in speed mode. |
     | [demo3_motion_torque.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo3_motion_torque.cpp) | This demo controls the actuator running at a constant torque in torque mode. |
@@ -70,7 +69,7 @@ $ make -j4
     | [demo6_motion_ctau.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo6_motion_ctau.cpp) | This is a demo of setting the target torque of 3 actuators simultaneously in broadcast mode (one packet). |
     | [demo7_motion_cpostau.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo7_motion_cpostau.cpp) | This is a demo of setting the maximum interval of broadcast read commands and setting the target positions and feedforward torques of 3 actuators simultaneously in broadcast mode (one packet). |
     | [demo8_motion_cposvel.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo8_motion_cposvel.cpp) | This is a demo of setting the maximum interval of broadcast read commands and setting the target positions and target speed of 3 actuators simultaneously in broadcast mode (one packet). |
-
+    
 * DataLink
 
     | Demo                                                         | Describe                                                     |

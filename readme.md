@@ -2,7 +2,7 @@
 ## Overview
 Umbratek C++ SDK, applicable products include: UTRA Arm Robot, OPTI Arm Robot, ADRA actuator, FIDO Quadruped Robot, FLXI E-Type Grippers, FLXI V-Type Grippers, DataLink Transceiver Module.
 
-All c/ C ++ apis do not duplicate comments, because the naming and construction are the same as the python api, so please also check the python api comments 
+All C/C++ APIs do not duplicate comments, because the naming and construction are the same as the python api, so please also check the python api comments 
 
 ##  **Notes** 
 

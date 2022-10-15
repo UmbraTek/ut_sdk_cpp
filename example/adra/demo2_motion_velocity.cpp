@@ -30,6 +30,8 @@ void check_ret(int ret, const char *str) {
  * This demo controls the actuator running at a constant speed in speed mode.
  * The actuator ID is 1 and RS485 baud rate is 921600.
  * Linux requires super user privileges to run code.
+ * run command(USB-To-RS485 + COM:/dev/ttyUSB0): sudo ./adra/demo2_motion_velocity 1 0 0
+ * run command(EtherNet-To-RS485 + IP:192.168.1.16): ./adra/demo2_motion_velocity 3 0 16
  */
 int main(int argc, char *argv[]) {
   if (argc != 3 && argc != 4) {
@@ -39,7 +41,7 @@ int main(int argc, char *argv[]) {
 
   int id = 1;
   int baud = 921600;
-  char com[] = "/dev/ttyCOM0";
+  char com[] = "/dev/ttyUSB0";
   char acm[] = "/dev/ttyACM0";
   char ip[] = "192.168.1.167";
   AdraApiBase *adra = NULL;
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]) {
   switch (atoi(argv[1])) {
     case 1:
       if (argc == 4) {
-        strcpy(com, "/dev/ttyCOM");
+        strcpy(com, "/dev/ttyUSB");
         strcat(com, argv[3]);
       }
       adra = new AdraApiSerial(com, baud, bus_type);

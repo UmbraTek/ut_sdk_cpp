@@ -27,10 +27,12 @@ void check_ret(int ret, const char *str) {
 }
 
 /**
- * This example is to control the device to move to the specified position
+ * This demo is to control the device to move to the specified position
  * The actuator ID is 1 and RS485 baud rate is 921600.
  * For better test results, make sure the actuator's current position is within ±100 radians.
  * Linux requires super user privileges to run code.
+ * run command(USB-To-RS485 + COM:/dev/ttyUSB0): sudo ./adra/demo1_motion_position 1 0 0
+ * run command(EtherNet-To-RS485 + IP:192.168.1.16): ./adra/demo1_motion_position 3 0 16
  */
 int main(int argc, char *argv[]) {
   if (argc != 3 && argc != 4) {
@@ -40,7 +42,7 @@ int main(int argc, char *argv[]) {
 
   int id = 1;
   int baud = 921600;
-  char com[] = "/dev/ttyCOM0";
+  char com[] = "/dev/ttyUSB0";
   char acm[] = "/dev/ttyACM0";
   char ip[] = "192.168.1.167";
   AdraApiBase *adra = NULL;
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]) {
   switch (atoi(argv[1])) {
     case 1:
       if (argc == 4) {
-        strcpy(com, "/dev/ttyCOM");
+        strcpy(com, "/dev/ttyUSB");
         strcat(com, argv[3]);
       }
       adra = new AdraApiSerial(com, baud, bus_type);

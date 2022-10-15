@@ -7,6 +7,10 @@
 #include "utapi/utra/utra_api_tcp.h"
 #include "utapi/utra/utra_flxie_api.h"
 
+/**
+ * TThis is a demo to get the parameters, status and other information of FLXI E on the robot.
+ * run command: ./utra/demo21_flxie2_get_param -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];

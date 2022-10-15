@@ -14,9 +14,11 @@ void print_help(void) {
   printf("           3: DataLink USB To RS485\n");
 }
 
+/**
+ * This example tests the EtherNet to RS485 module, sends the received RS485 data back.
+ * run command: ./datalink/demo1_datalink_rs485 1
+ */
 int main(int argc, char *argv[]) {
-  // This example tests the EtherNet to RS485 module, sends the received RS485 data back.
-
   if (argc != 2) {
     print_help();
     return 0;

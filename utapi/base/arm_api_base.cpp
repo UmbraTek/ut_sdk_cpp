@@ -164,11 +164,17 @@ int ArmApiBase::saved_parm(void) { return set_reg_int8((uint8_t*)&reg_->SAVED_PA
  ************************************************************/
 int ArmApiBase::get_motion_mode(uint8_t* mode) { return get_reg_int8(mode, reg_->MOTION_MDOE); }
 int ArmApiBase::set_motion_mode(uint8_t mode) { return set_reg_int8(&mode, reg_->MOTION_MDOE); }
+int ArmApiBase::into_motion_mode_pos(void) { return set_motion_mode(0); }
+int ArmApiBase::into_motion_mode_teach(void) { return set_motion_mode(2); }
+
 int ArmApiBase::get_motion_enable(int* able) { return get_reg_int32(able, reg_->MOTION_ENABLE); }
 int ArmApiBase::set_motion_enable(uint8_t axis, uint8_t en) {
   uint8_t data[2] = {axis, en};
   return set_reg_int8(data, reg_->MOTION_ENABLE);
 }
+int ArmApiBase::into_motion_enable(void) { return set_motion_enable(99, 1); }
+int ArmApiBase::into_motion_disable(void) { return set_motion_enable(99, 0); }
+
 int ArmApiBase::get_brake_enable(int* able) { return get_reg_int32(able, reg_->BRAKE_ENABLE); }
 int ArmApiBase::set_brake_enable(uint8_t axis, uint8_t en) {
   uint8_t data[2] = {axis, en};
@@ -178,6 +184,10 @@ int ArmApiBase::get_error_code(uint8_t* code) { return get_reg_int8(code, reg_->
 int ArmApiBase::get_servo_msg(uint8_t* msg) { return get_reg_int8(msg, reg_->SERVO_MSG); }
 int ArmApiBase::get_motion_status(uint8_t* status) { return get_reg_int8(status, reg_->MOTION_STATUS); }
 int ArmApiBase::set_motion_status(uint8_t status) { return set_reg_int8(&status, reg_->MOTION_STATUS); }
+int ArmApiBase::motion_status_into_stop(void) { return set_motion_status(4); }
+int ArmApiBase::motion_status_into_ready(void) { return set_motion_status(0); }
+int ArmApiBase::motion_status_into_pause(void) { return set_motion_status(3); }
+
 int ArmApiBase::get_cmd_num(int* num) { return get_reg_int32(num, reg_->CMD_NUM); }
 int ArmApiBase::set_cmd_num(int num) { return set_reg_int32(&num, reg_->CMD_NUM); }
 

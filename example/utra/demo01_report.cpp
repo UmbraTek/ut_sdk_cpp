@@ -7,6 +7,13 @@
 #include "utra/utra_report_config.h"
 #include "utra/utra_report_status.h"
 
+/**
+ * This is a demo to print the data of three real-time automatically reported ports.
+ * run command:
+ *    ./utra/demo01_report -i 192.168.1.xxx -m 1
+ *    ./utra/demo01_report -i 192.168.1.xxx -m 2
+ *    ./utra/demo01_report -i 192.168.1.xxx -m 3
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   uint8_t mode = 1;

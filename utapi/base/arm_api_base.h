@@ -33,14 +33,21 @@ class ArmApiBase {
 
   int get_motion_mode(uint8_t* mode);
   int set_motion_mode(uint8_t mode);
+  int into_motion_mode_pos(void);
+  int into_motion_mode_teach(void);
   int get_motion_enable(int* able);
   int set_motion_enable(uint8_t axis, uint8_t en);
+  int into_motion_enable(void);
+  int into_motion_disable(void);
   int get_brake_enable(int* able);
   int set_brake_enable(uint8_t axis, uint8_t en);
   int get_error_code(uint8_t* code);
   int get_servo_msg(uint8_t* msg);
   int get_motion_status(uint8_t* status);
   int set_motion_status(uint8_t status);
+  int motion_status_into_stop(void);
+  int motion_status_into_ready(void);
+  int motion_status_into_pause(void);
   int get_cmd_num(int* num);
   int set_cmd_num(int num);
 

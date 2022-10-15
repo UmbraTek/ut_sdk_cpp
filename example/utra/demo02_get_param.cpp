@@ -7,6 +7,10 @@
 #include "common/print.h"
 #include "utapi/utra/utra_api_tcp.h"
 
+/**
+ * This is a demo to get ubot parameters, status and other information
+ * run command: ./utra/demo02_get_param -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];

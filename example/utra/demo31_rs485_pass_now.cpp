@@ -6,6 +6,11 @@
  ============================================================================*/
 #include "utapi/utra/utra_api_tcp.h"
 
+/**
+ * This is a demo of pass-through data to rs485 at the end of the manipulator.
+ * The command to pass-through data takes effect immediately whether the robot is moving or not.
+ * run command: ./utra/demo31_rs485_pass_now -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];

@@ -7,6 +7,11 @@
 #include "utapi/utra/utra_api_tcp.h"
 #include "utapi/utra/utra_flxiv_api.h"
 
+/**
+ * This is a demo of a robot controlling the FLXI V on robot.
+ * The command to control FLXI V will wait for the preceding robot motion command to be executed before taking effect.
+ * run command: ./utra/demo26_flxiv_motion_que -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];
@@ -41,12 +46,12 @@ int main(int argc, char *argv[]) {
   sleep(3);
 
   ret = fixiv->set_motion_enable(0, false);
-  printf("set_pos_target: %d\n", ret);
+  printf("set_motion_enable: %d\n", ret);
   ret = ubot->move_sleep(5);
   printf("move_sleep :%d\n", ret);
 
   ret = fixiv->set_motion_enable(1, false);
-  printf("set_pos_target: %d\n", ret);
+  printf("set_motion_enable: %d\n", ret);
 
   return 0;
 }

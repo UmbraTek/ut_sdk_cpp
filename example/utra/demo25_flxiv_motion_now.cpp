@@ -7,6 +7,11 @@
 #include "utapi/utra/utra_api_tcp.h"
 #include "utapi/utra/utra_flxiv_api.h"
 
+/**
+ * This is a demo of controlling a FLXI V on robot.
+ * The command to control the FLXI V takes effect immediately whether the robot is moving or not.
+ * run command: ./utra/demo22_flxie2_motion_now -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];

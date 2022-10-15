@@ -6,6 +6,10 @@
  ============================================================================*/
 #include "utapi/utra/utra_api_tcp.h"
 
+/**
+ * This is a demo of movement in joint space.
+ * run command: ./utra/demo03_motion_p2p -i 192.168.1.xxx
+ */
 int main(int argc, char *argv[]) {
   int opt = 0;
   char ip[64];

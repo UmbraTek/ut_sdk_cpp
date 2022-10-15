@@ -14,9 +14,11 @@ void print_help(void) {
   printf("           3: DataLink USB To CAN\n");
 }
 
+/**
+ * This example tests the EtherNet to CAN module, sends the received CAN data back.
+ * run command: ./datalink/demo2_datalink_can 1
+ */
 int main(int argc, char *argv[]) {
-  // This example tests the EtherNet to CAN module, sends the received CAN data back.
-
   if (argc != 2) {
     print_help();
     return 0;

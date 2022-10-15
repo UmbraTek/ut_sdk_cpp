@@ -25,9 +25,12 @@ void check_ret(int ret, const char *str) {
 }
 
 /**
- * Broadcast mode (one packet) sets 3 actuator target torque.
+ * This is a demo of setting the target torque of 3 actuators simultaneously in broadcast mode (one packet).
+ * This function only supports actuators with RS485 ports.
  * The actuator ID is 1 2 3 and RS485 baud rate is 921600
  * Linux requires super user privileges to run code.
+ * run command(USB-To-RS485 + COM:/dev/ttyUSB0): sudo ./adra/demo6_motion_ctau 1 0
+ * run command(EtherNet-To-RS485 + IP:192.168.1.16): ./adra/demo6_motion_ctau 3 16
  */
 int main(int argc, char *argv[]) {
   if (argc != 2 && argc != 3) {
@@ -36,7 +39,7 @@ int main(int argc, char *argv[]) {
   }
 
   int baud = 921600;
-  char com[] = "/dev/ttyCOM0";
+  char com[] = "/dev/ttyUSB0";
   char acm[] = "/dev/ttyACM0";
   char ip[] = "192.168.1.167";
   AdraApiBase *adra = NULL;
@@ -44,7 +47,7 @@ int main(int argc, char *argv[]) {
   switch (atoi(argv[1])) {
     case 1:
       if (argc == 3) {
-        strcpy(com, "/dev/ttyCOM");
+        strcpy(com, "/dev/ttyUSB");
         strcat(com, argv[2]);
       }
       adra = new AdraApiSerial(com, baud, BUS_TYPE::UTRC);

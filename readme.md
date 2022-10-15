@@ -59,8 +59,8 @@ $ make -j4
 
 * ADRA
 
-  | Demo                                                         | Describe                                                     |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+    | Demo                                                         | Describe                                                     |
+    | ------------------------------------------------------------ | ------------------------------------------------------------ |
     | [demo1_motion_position.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo1_motion_position.cpp) | This demo is to control the device to move to the specified position. |
     | [demo2_motion_velocity.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo2_motion_velocity.cpp) | This demo controls the actuator running at a constant speed in speed mode. |
     | [demo3_motion_torque.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/adra/demo3_motion_torque.cpp) | This demo controls the actuator running at a constant torque in torque mode. |
@@ -73,7 +73,7 @@ $ make -j4
 * DataLink
 
     | Demo                                                         | Describe                                                     |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+    | ------------------------------------------------------------ | ------------------------------------------------------------ |
     | [demo1_datalink_rs485.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/datalink/demo1_datalink_rs485.cpp) | This example tests the EtherNet to RS485 module, sends the received RS485 data back. |
     | [demo2_datalink_can.cpp](https://github.com/UmbraTek/ut_sdk_cpp/blob/master/example/datalink/demo2_datalink_can.cpp) | This example tests the EtherNet to CAN module, sends the received CAN data back. |
 

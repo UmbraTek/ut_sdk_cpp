@@ -79,10 +79,12 @@ int ServoApiBase::pend(uint8_t rx_len, float timeout_s) {
   int ret = -99;
   if (bus_type_ == BUS_TYPE::UTRC) {
     ret = utrc_client_->pend(&utrc_tx_, rx_len, timeout_s, &utrc_rx_);
+    if (ret == UTRC_ERROR::TIMEOUT) return ret;
     rx_stream_.len = utrc_rx_.len - 1;
     memcpy(rx_stream_.data, utrc_rx_.data, rx_stream_.len);
   } else if (bus_type_ == BUS_TYPE::UTCC) {
     ret = utcc_client_->pend(&utcc_tx_, rx_len, timeout_s, &utcc_rx_);
+    if (ret == UTRC_ERROR::TIMEOUT) return ret;
     rx_stream_.len = utcc_rx_.len - 1;
     memcpy(rx_stream_.data, utcc_rx_.data, rx_stream_.len);
     // Print::hex("[ServoApi] pend: ", rx_stream_.data, rx_stream_.len);

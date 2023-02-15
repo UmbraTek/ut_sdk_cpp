@@ -93,6 +93,8 @@ class ArmApiBase {
   int get_tcp_actual_pos(float* pos);
   int get_joint_target_pos(float* pos);
   int get_joint_actual_pos(float* pos);
+  int get_joint_target_vel(float* vel);
+  int get_joint_actual_vel(float* vel);
   int get_ik(float* pose, float* qnear, float* joints);
   int get_fk(float* joints, float* pose);
   int is_joint_limit(void);

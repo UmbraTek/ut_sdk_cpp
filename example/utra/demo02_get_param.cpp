@@ -82,6 +82,8 @@ int main(int argc, char *argv[]) {
   Print::nvect("get_tcp_target_pos   : ", value_fp, 6);
   ret = ubot->get_joint_target_pos(value_fp);
   Print::nvect("get_joint_target_pos :", value_fp, axis);
+  ret = ubot->get_joint_target_vel(value_fp);
+  Print::nvect("get_joint_target_vel :", value_fp, axis);
 
   float pos[6] = {300, -300, 400, 3.14 * 0.5, 0, 3.14 * 0.5};
   float joint[7] = {1.8988, 0.1065, -1.9738, -2.0803, -0.3281, 0, 0};

@@ -95,9 +95,10 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < number; i++) {
     ret = adra->into_motion_mode_pos(id[i]);  // Step 1: Set the motion mode to position mode.
     check_ret(ret, "into_motion_mode_pos");
-
+    sleep(0.5);
     ret = adra->into_motion_enable(id[i]);  // Step 2: Enable the actuator.
     check_ret(ret, "into_motion_enable");
+    sleep(0.5);
   }
   sleep(1);
 

@@ -398,6 +398,8 @@ int ArmApiBase::get_tcp_target_pos(float* pos) { return get_reg_fp32(pos, reg_->
 int ArmApiBase::get_tcp_actual_pos(float* pos) { return 0; }
 int ArmApiBase::get_joint_target_pos(float* pos) { return get_reg_fp32(pos, reg_->JOINT_POS_CURR, axis_); }
 int ArmApiBase::get_joint_actual_pos(float* pos) { return 0; }
+int ArmApiBase::get_joint_target_vel(float* vel) { return get_reg_fp32(vel, reg_->JOINT_VEL_CURR, axis_); }
+int ArmApiBase::get_joint_actual_vel(float* vel) { return 0; }
 
 int ArmApiBase::get_ik(float* pose, float* qnear, float* joints) {
   float tx_date[axis_ + 6];

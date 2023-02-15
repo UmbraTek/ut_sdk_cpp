@@ -74,6 +74,7 @@ class ARM_REG {
   const uint8_t CAL_FK[5] = {0x53, (uint8_t)(AXIS * 4), 24, ' ', ' '};
   const uint8_t IS_JOINT_LIMIT[5] = {0x54, (uint8_t)(AXIS * 4), 1, ' ', ' '};
   const uint8_t IS_TCP_LIMIT[5] = {0x55, 24, 1, ' ', ' '};
+  const uint8_t JOINT_VEL_CURR[5] = {0x56, 0, (uint8_t)(AXIS * 4), ' ', ' '};
 
   const uint8_t UTRC_INT8_NOW[5] = {0x60, 3, 2, 4, 1};
   const uint8_t UTRC_INT32_NOW[5] = {0x61, 3, 8, 7, 1};

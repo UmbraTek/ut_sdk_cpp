@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
   int rets[number];
 
   while (1) {
-    // Step 4: Sets the current positions and feedforward torques of the three actuators.
+    // Step 4: Sets the target positions and feedforward torques of the three actuators.
     ret = adra->set_cpostau_target(id[0], id[number - 1], pos1, tau1);
     check_ret(ret, "set_cpostau_target");
 

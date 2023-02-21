@@ -98,6 +98,8 @@ class AdraApiBase : private ServoApiBase {
   int set_vel_smooth_cyc(int id, uint8_t cyc);
   int get_vel_adrc_param(int id, uint8_t i, float* param);
   int set_vel_adrc_param(int id, uint8_t i, float param);
+  int get_vel_output_filter_param(int id, int* param);
+  int set_vel_output_filter_param(int id, int param);
 
   int get_tau_target(int id, float* tau);
   int set_tau_target(int id, float tau);
@@ -123,6 +125,7 @@ class AdraApiBase : private ServoApiBase {
   int set_cposvel_target(uint8_t sid, uint8_t eid, float* pos, float* vel);
   int get_spostau_current(uint8_t id, int* num, float* pos, float* tau);
   int get_cpostau_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
+  int get_cpvt_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret);
 
  private:
 };

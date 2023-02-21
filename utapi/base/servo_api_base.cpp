@@ -342,6 +342,23 @@ int ServoApiBase::set_vel_adrc_param_(int id, uint8_t i, float param) {
   pthread_mutex_unlock(&mutex_);
   return ret;
 }
+int ServoApiBase::get_vel_output_filter_param_(int id, int* param) {
+  uint8_t data[1] = {1};
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(id, SERVO_RW::R, reg_.VEL_FILTER_PARAM, data);
+  HexData::hex_to_int32_big(&rx_stream_.data[0], param, 1);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+int ServoApiBase::set_vel_output_filter_param_(int id, int param) {
+  uint8_t data[4];
+  HexData::int32_to_hex_big(param, data);
+  uint8_t txdata[5] = {1, data[0], data[1], data[2], data[3]};
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(id, SERVO_RW::W, reg_.VEL_FILTER_PARAM, txdata);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
 
 // tau
 int ServoApiBase::get_tau_target_(int id, float* tau) { return get_reg_fp32(id, tau, reg_.TAU_TARGET); }
@@ -500,6 +517,45 @@ int ServoApiBase::get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float
     } else {
       num[i] = 0;
       pos[i] = 0;
+      tau[i] = 0;
+    }
+
+    temp += ret[i];
+  }
+  pthread_mutex_unlock(&mutex_);
+
+  return temp;
+}
+
+int ServoApiBase::get_cpvt_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret) {
+  if (bus_type_ != BUS_TYPE::UTRC) return -77;
+
+  int temp = 0;
+  int id = 0x55;
+  uint8_t rw = SERVO_RW::R;
+  const uint8_t* cmd = reg_.CPVT_CURRENT;
+  uint8_t tx_data[2] = {sid, eid};
+  float timeout_s = 0.5;
+  int tx_len = cmd[1];
+  int rx_len = cmd[2];
+
+  pthread_mutex_lock(&mutex_);
+  id_ = id;
+  utrc_tx_.slave_id = id_;
+  send(rw, cmd[0], tx_len, tx_data);
+
+  for (int i = 0; i < eid - sid + 1; i++) {
+    ret[i] = pend(rx_len, timeout_s);
+    if (utrc_rx_.master_id != i + 1) ret[i] = UTRC_ERROR::TIMEOUT;
+    if (ret[i] != UTRC_ERROR::TIMEOUT) {
+      num[i] = rx_stream_.data[0];
+      pos[i] = HexData::hex_to_fp32_big(&rx_stream_.data[1]);
+      vel[i] = HexData::hex_to_fp32_big(&rx_stream_.data[5]);
+      tau[i] = HexData::hex_to_fp32_big(&rx_stream_.data[9]);
+    } else {
+      num[i] = 0;
+      pos[i] = 0;
+      vel[i] = 0;
       tau[i] = 0;
     }
 

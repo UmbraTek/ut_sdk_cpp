@@ -98,6 +98,8 @@ int AdraApiBase::get_vel_smooth_cyc(int id, uint8_t* cyc) { return get_vel_smoot
 int AdraApiBase::set_vel_smooth_cyc(int id, uint8_t cyc) { return set_vel_smooth_cyc_(id, cyc); }
 int AdraApiBase::get_vel_adrc_param(int id, uint8_t i, float* param) { return get_vel_adrc_param_(id, i, param); }
 int AdraApiBase::set_vel_adrc_param(int id, uint8_t i, float param) { return set_vel_adrc_param_(id, i, param); }
+int AdraApiBase::get_vel_output_filter_param(int id, int* param) { return get_vel_output_filter_param_(id, param); }
+int AdraApiBase::set_vel_output_filter_param(int id, int param) { return set_vel_output_filter_param_(id, param); }
 
 int AdraApiBase::get_tau_target(int id, float* tau) { return get_tau_target_(id, tau); }
 int AdraApiBase::set_tau_target(int id, float tau) { return set_tau_target_(id, tau); }
@@ -130,4 +132,8 @@ int AdraApiBase::get_spostau_current(uint8_t id, int* num, float* pos, float* ta
 }
 int AdraApiBase::get_cpostau_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret) {
   return get_cpostau_current_(sid, eid, num, pos, tau, ret);
+}
+
+int AdraApiBase::get_cpvt_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret) {
+  return get_cpvt_current_(sid, eid, num, pos, vel, tau, ret);
 }

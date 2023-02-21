@@ -42,3 +42,8 @@ add_executable(demo8_motion_cposvel
 	demo8_motion_cposvel.cpp
 )
 target_link_libraries(demo8_motion_cposvel utapi pthread rt m)
+
+add_executable(demo9_motion_cpvt
+	demo9_motion_cpvt.cpp
+)
+target_link_libraries(demo9_motion_cpvt utapi pthread rt m)

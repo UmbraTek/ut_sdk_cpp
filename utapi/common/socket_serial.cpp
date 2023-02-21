@@ -5,6 +5,7 @@
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
 #include "socket_serial.h"
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
+
 #include "linuxcvl.h"
 #include "print.h"
 

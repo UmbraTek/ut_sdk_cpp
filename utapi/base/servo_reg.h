@@ -62,6 +62,7 @@ class SERVO_REG {
   const uint8_t VEL_PIDI[5] = {0x46, 0, 4, 4, 0};
   const uint8_t VEL_SMOOTH_CYC[5] = {0x47, 0, 1, 1, 0};
   const uint8_t VEL_ADRC_PARAM[5] = {0x49, 1, 4, 5, 0};
+  const uint8_t VEL_FILTER_PARAM[5] = {0x4A, 1, 4, 5, 0};
 
   const uint8_t TAU_TARGET[5] = {0x50, 0, 4, 4, 0};
   const uint8_t TAU_CURRENT[5] = {0x51, 0, 4, 0, 0};
@@ -79,6 +80,8 @@ class SERVO_REG {
   uint8_t CPOSVEL_TARGET[5] = {0x64, ' ', ' ', 0, ' '};     // startId endId (pos+vel)*Axis
   uint8_t SPOSTAU_CURRENT[5] = {0x68, 0, 8 + 1, ' ', ' '};  // Gets the current position and torque of an actuator
   uint8_t CPOSTAU_CURRENT[5] = {0x69, 2, 8 + 1, ' ', ' '};  // startId endId
+  uint8_t SPVT_CURRENT[5] = {0x6A, 2, 12 + 1, ' ', ' '};    // startId endId
+  uint8_t CPVT_CURRENT[5] = {0x6B, 2, 12 + 1, ' ', ' '};    // startId endId
 };
 
 #endif

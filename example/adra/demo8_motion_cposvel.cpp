@@ -10,7 +10,7 @@
 
 void print_help(void) {
   printf("Select the communication interface and protocol type\n");
-  printf("./demo7_motion_cpostau arg1\n");
+  printf("./demo8_motion_cposvel arg1\n");
   printf("    [arg1] 1: Serial COM\n");
   printf("           2: Serial ACM\n");
   printf("           3: TCP\n");
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
   int rets[number];
 
   while (1) {
-    // Step 4: Sets the current positions and feedforward torques of the three actuators.
+    // Step 4: Sets the target positions and speed of the three actuators.
     ret = adra->set_cposvel_target(id[0], id[number - 1], pos1, vel1);
     check_ret(ret, "set_cposvel_target");
 

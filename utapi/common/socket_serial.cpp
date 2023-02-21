@@ -6,17 +6,6 @@
  ============================================================================*/
 #include "socket_serial.h"
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/shm.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <termios.h>
-#include <unistd.h>
-
-#include "linuxcvl.h"
 #include "print.h"
 
 SocketSerial::SocketSerial(const char *port, int baud, int rxque_max, SerialDecode *decode, int rxlen_max, int priority) {
@@ -96,6 +85,10 @@ void SocketSerial::recv_proc(void) {
   }
 }
 
+#if 0
+#include <fcntl.h>
+#include <termios.h>
+
 int SocketSerial::init_serial(const char *port, int baud) {
   fp_ = open((const char *)port, O_RDWR | O_NOCTTY | O_NDELAY);
   if (-1 == fp_) return -1;
@@ -108,6 +101,7 @@ int SocketSerial::init_serial(const char *port, int baud) {
   }
 
   speed_t speed = B115200;
+  bool is_non_standard_baus = false;
   switch (baud) {
     case 110:
       speed = B110;
@@ -163,6 +157,10 @@ int SocketSerial::init_serial(const char *port, int baud) {
     case 4000000:
       speed = B4000000;
       break;
+    default:
+      speed = B38400;
+      is_non_standard_baus = true;
+      break;
   }
 
   struct termios options;
@@ -177,20 +175,12 @@ int SocketSerial::init_serial(const char *port, int baud) {
   options.c_cflag &= ~CSIZE;
 
   //  set tty speed
-  ret = cfsetispeed(&options, speed);
-  if (ret != 0) return -3;
-  ret = cfsetospeed(&options, speed);
-  if (ret != 0) return -4;
-
-  //  data bits 8
-  options.c_cflag |= CS8;
-
-  // parity N
+  if (0 != cfsetispeed(&options, speed)) return -3;
+  if (0 != cfsetospeed(&options, speed)) return -4;
+  options.c_cflag |= CS8;      // data bits 8
   options.c_cflag &= ~PARENB;  // parity = N , Clear parity enable
   options.c_iflag &= ~INPCK;   // parity = N , Enable parity checking
-
-  // stop bits=1
-  options.c_cflag &= ~CSTOPB;
+  options.c_cflag &= ~CSTOPB;  // stop bits=1
 
   int hardflow = 0;
   if (hardflow) {
@@ -201,18 +191,41 @@ int SocketSerial::init_serial(const char *port, int baud) {
 
   options.c_cc[VTIME] = 100;  // Time-out value (tenths of a second) [!ICANON].
   options.c_cc[VMIN] = 1;     // Minimum number of bytes read at once [!ICANON].
-
-  // options.c_iflag &= ~(INLCR | ICRNL);         //不要回车和换行转换
-  // options.c_iflag &= ~(IXON | IXOFF | IXANY);  //不要软件流控制
-  // options.c_oflag &= ~OPOST;
-  // options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);  //原始模式
-  // options.c_cflag &= ~CRTSCTS;
-
   tcflush(fp_, TCIFLUSH);
   ret = tcsetattr(fp_, TCSANOW, &options);
   if (ret != 0) return -5;
+
   return 0;
 }
+
+#else
+
+#include <asm/termbits.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
+int SocketSerial::init_serial(const char *port, int baud) {
+  fp_ = open((const char *)port, O_RDWR | O_NOCTTY | O_NDELAY);
+  if (-1 == fp_) return -1;
+
+  struct termios2 tio {};
+  if (0 != ioctl(fp_, TCGETS2, &tio)) return -2;
+
+  tio.c_cflag |= CS8;      // data bits 8
+  tio.c_cflag &= ~PARENB;  // parity = N , Clear parity enable
+  tio.c_iflag &= ~INPCK;   // parity = N , Enable parity checking
+  tio.c_cflag &= ~CSTOPB;  // stop bits=1
+  tio.c_cflag &= ~CRTSCTS;
+
+  tio.c_ispeed = baud;
+  tio.c_ospeed = baud;
+  tio.c_cc[VMIN] = 100;
+  tio.c_cc[VTIME] = 1;
+  if (0 != ioctl(fp_, TCSETS2, &tio)) return -3;
+
+  return 0;
+}
+#endif
 
 // g++ linux/port/serial.cpp common/crc16.cpp linux/thread.cc -o serial123 -I./ -lpthread
 /*

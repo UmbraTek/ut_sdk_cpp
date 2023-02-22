@@ -59,6 +59,7 @@ class ArmApiBase {
   int moveto_joint_line(float* mvjoint, float mvvelo, float mvacc, float mvtime);
   int moveto_joint_lineb(float* mvjoint, float mvvelo, float mvacc, float mvtime, float mvradii);
   int moveto_joint_p2p(float* mvjoint, float mvvelo, float mvacc, float mvtime);
+  int moveto_joint_p2pb(float* mvjoint, float mvvelo, float mvacc, float mvtime, float mvradii);
   int moveto_joint_circle(float* mvjoint1, float* mvjoint2, float mvvelo, float mvacc, float mvtime, float percent);
   int moveto_home_p2p(float mvvelo, float mvacc, float mvtime);
   int moveto_servo_joint(int frames_num, float* mvjoint, float* mvtime);

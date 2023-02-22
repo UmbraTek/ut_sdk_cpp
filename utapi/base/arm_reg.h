@@ -50,7 +50,7 @@ class ARM_REG {
   const uint8_t MOVEJ_LINEB[5] = {0x36, ' ', ' ', (uint8_t)((AXIS + 4) * 4), 4};
   const uint8_t MOVEJ_CIRCLE[5] = {0x37, ' ', ' ', (uint8_t)((AXIS * 2 + 4) * 4), 4};
   const uint8_t MOVEJ_P2P[5] = {0x38, ' ', ' ', (uint8_t)((AXIS + 3) * 4), 4};
-  const uint8_t MoveJ_P2PB[5] = {0x39, ' ', ' ', ' ', ' '};
+  const uint8_t MOVEJ_P2PB[5] = {0x39, ' ', ' ', (uint8_t)((AXIS + 4) * 4), 4};
   const uint8_t MOVEJ_HOME[5] = {0x3A, ' ', ' ', 12, 4};
   const uint8_t MOVE_SLEEP[5] = {0x3B, ' ', ' ', 4, 4};
   uint8_t MOVEJ_SERVO[5] = {0x3D, ' ', ' ', 0x55, 4};

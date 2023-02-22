@@ -274,6 +274,16 @@ int ArmApiBase::moveto_joint_p2p(float* mvjoint, float mvvelo, float mvacc, floa
   return set_reg_fp32(data, reg_->MOVEJ_P2P, axis_ + 3);
 }
 
+int ArmApiBase::moveto_joint_p2pb(float* mvjoint, float mvvelo, float mvacc, float mvtime, float mvradii) {
+  float data[axis_ + 4];
+  memcpy(data, mvjoint, axis_ * 4);
+  data[axis_] = mvvelo;
+  data[axis_ + 1] = mvacc;
+  data[axis_ + 2] = mvtime;
+  data[axis_ + 3] = mvradii;
+  return set_reg_fp32(data, reg_->MOVEJ_P2PB, axis_ + 4);
+}
+
 int ArmApiBase::moveto_home_p2p(float mvvelo, float mvacc, float mvtime) {
   float data[3] = {mvvelo, mvacc, mvtime};
   return set_reg_fp32(data, reg_->MOVEJ_HOME, 3);

@@ -9,11 +9,11 @@
 
 #include <stddef.h>
 #include <stdio.h>
+
 #include "crc16.h"
 #include "hex_data.h"
 #include "print.h"
 #include "socket.h"
-
 
 class UTRC_ERROR {
  public:

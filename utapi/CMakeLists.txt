@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 project(utapi)
 
-
 include_directories("./")
 
 add_library(utapi STATIC
-    common/network.cpp    
-    common/preempt_rt.cpp    
+    common/network.cpp
+    common/preempt_rt.cpp
     common/socket_serial.cpp
     common/socket_tcp.cpp
     common/socket_udp.cpp
@@ -21,6 +20,6 @@ add_library(utapi STATIC
     utra/utra_report_config.cpp
     utra/utra_flxie_api.cpp
     utra/utra_flxiv_api.cpp
-    )
+)
 
 target_link_libraries(utapi rt pthread)

@@ -38,6 +38,12 @@ add_executable(demo08_motion_servo
 )
 target_link_libraries(demo08_motion_servo utapi pthread rt m)
 
+add_executable(demo09_motion_p2pb
+	demo09_motion_p2pb.cpp
+)
+target_link_libraries(demo09_motion_p2pb utapi pthread rt m)
+
+
 add_executable(demo21_flxie2_get_param
 	demo21_flxie2_get_param.cpp
 )

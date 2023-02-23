@@ -54,6 +54,7 @@ int AdraApiBase::into_motion_mode_vel(int id) { return set_motion_mode_(id, MOTI
 int AdraApiBase::into_motion_mode_tau(int id) { return set_motion_mode_(id, MOTION_MODEL::TAU); }
 int AdraApiBase::into_motion_enable(int id) { return set_motion_enable_(id, 1); }
 int AdraApiBase::into_motion_disable(int id) { return set_motion_enable_(id, 0); }
+int AdraApiBase::into_motion_stop(int id) { return set_motion_mode_(id, 21); }
 int AdraApiBase::into_brake_enable(int id) { return set_brake_enable_(id, 1); }
 int AdraApiBase::into_brake_disable(int id) { return set_brake_enable_(id, 0); }
 

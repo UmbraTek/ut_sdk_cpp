@@ -54,6 +54,7 @@ class AdraApiBase : private ServoApiBase {
   int into_motion_mode_tau(int id);
   int into_motion_enable(int id);
   int into_motion_disable(int id);
+  int into_motion_stop(int id);
   int into_brake_enable(int id);
   int into_brake_disable(int id);
 

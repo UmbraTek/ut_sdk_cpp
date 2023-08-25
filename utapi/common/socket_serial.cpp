@@ -209,18 +209,43 @@ int SocketSerial::init_serial(const char *port, int baud) {
   if (-1 == fp_) return -1;
 
   struct termios2 tio {};
-  if (0 != ioctl(fp_, TCGETS2, &tio)) return -2;
+  if (0 != ioctl(fp_, TCGETS2, &tio)) {  // Read the configuration
+    close(fp_);
+    return -2;
+  }
 
-  tio.c_cflag |= CS8;      // data bits 8
-  tio.c_cflag &= ~PARENB;  // parity = N , Clear parity enable
-  tio.c_iflag &= ~INPCK;   // parity = N , Enable parity checking
-  tio.c_cflag &= ~CSTOPB;  // stop bits=1
-  tio.c_cflag &= ~CRTSCTS;
+  tio.c_iflag &= ~(IGNBRK);  // Ignore break condition
+  tio.c_iflag &= ~(BRKINT);  // Send a SIGINT when a break condition is detected
+  tio.c_iflag &= ~(PARMRK);  // Mark parity errors
+  tio.c_iflag &= ~(ISTRIP);  // Strip parity bits
+  tio.c_iflag &= ~(INLCR);   // Map NL to CR
+  tio.c_iflag &= ~(IGNCR);   // Ignore CR
+  tio.c_iflag &= ~(ICRNL);   // Map CR to NL
+  tio.c_iflag &= ~(IXON);    // Enable software flow control (outgoing)
+  // tio.c_iflag |= (INPCK);    // Enable parity check
+  tio.c_iflag |= (IGNPAR);  // Ignore parity errors
+
+  tio.c_oflag &= ~OPOST;  // Turn off the output flag
+
+  tio.c_lflag &= ~(ECHO);
+  tio.c_lflag &= ~(ECHONL);
+  tio.c_lflag &= ~(ICANON);  // Enable canonical input (else raw)
+  tio.c_lflag &= ~(ISIG);
+  tio.c_lflag &= ~(IEXTEN);  // Enable extended functions
+
+  tio.c_cflag &= ~(CBAUD);
+  tio.c_cflag |= (BOTHER);
+  tio.c_cflag |= CLOCAL | CREAD;  // Local connection and acceptance enable
+  tio.c_cflag &= ~CSIZE;          // Clear the data bit setting
+  tio.c_cflag |= CS8;             // data bits 8
+  tio.c_cflag &= ~PARENB;         // parity = N , Clear parity enable
+  tio.c_cflag &= ~CSTOPB;         // stop bits=1
+  tio.c_cflag &= ~CRTSCTS;        // Hardware flow control is disable
 
   tio.c_ispeed = baud;
   tio.c_ospeed = baud;
-  tio.c_cc[VMIN] = 100;
-  tio.c_cc[VTIME] = 1;
+  tio.c_cc[VMIN] = 100;  // Specifies the amount of time, in n*100ms, to wait to read the first character
+  tio.c_cc[VTIME] = 1;   // Specifies the minimum number of characters to read
   if (0 != ioctl(fp_, TCSETS2, &tio)) return -3;
 
   return 0;

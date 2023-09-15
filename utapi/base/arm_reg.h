@@ -95,6 +95,7 @@ class ARM_REG {
   const uint8_t GPIO_OU[5] = {0x6F, 2, 0x55, ' ', ' '};
 
   const uint8_t FRICTION[5] = {0x70, 2, 16, 2 + 16, 0};
+  const uint8_t DH_OFFSET[5] = {0x71, 2, 16, 2 + 16, 0};
 };
 
 #endif

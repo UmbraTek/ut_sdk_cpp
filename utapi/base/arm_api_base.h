@@ -103,6 +103,8 @@ class ArmApiBase {
 
   int get_friction(uint8_t axis, float* value);
   int set_friction(uint8_t axis, float* fri);
+  int get_dh_offset(uint8_t axis, float* offset);
+  int set_dh_offset(uint8_t axis, float* offset);
 
   int get_utrc_int8_now(uint8_t line, uint8_t id, uint8_t reg, uint8_t* value);
   int set_utrc_int8_now(uint8_t line, uint8_t id, uint8_t reg, uint8_t value);

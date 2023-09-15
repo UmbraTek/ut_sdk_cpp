@@ -401,6 +401,23 @@ int ArmApiBase::set_friction(uint8_t axis, float* fri) {
   return ret;
 }
 
+int ArmApiBase::get_dh_offset(uint8_t axis, float* offset) {
+  uint8_t tx_data[2] = {reg_->DH_OFFSET[0], axis};
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::R, reg_->DH_OFFSET, tx_data);
+  HexData::hex_to_fp32_big(&utrc_rx_.data[0], offset, 4);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+int ArmApiBase::set_dh_offset(uint8_t axis, float* offset) {
+  uint8_t data[4 * 4 + 2] = {reg_->DH_OFFSET[0], axis};
+  HexData::fp32_to_hex_big(offset, &data[2], 4);
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::W, reg_->DH_OFFSET, data);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
 /************************************************************
  *                     State Api
  ************************************************************/

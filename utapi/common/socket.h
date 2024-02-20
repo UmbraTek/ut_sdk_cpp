@@ -33,6 +33,7 @@ class Socket {
   Socket(void) {}
   virtual ~Socket(void) {}
   virtual bool is_error(void) = 0;
+  virtual bool is_ok(void) = 0;
   virtual void close_port(void) = 0;
   virtual void flush(bool is_decode = true) = 0;
   virtual void flush(int params1, int params2, int params3) = 0;

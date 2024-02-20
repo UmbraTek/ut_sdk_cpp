@@ -8,6 +8,7 @@
 #define __COMMON_PORT_SERIAL_H__
 
 #include <pthread.h>
+
 #include "periodic_rt.h"
 #include "socket.h"
 
@@ -15,6 +16,7 @@ class SocketSerial : public Socket {
  public:
   SocketSerial(const char* port, int baud, int rxque_max, SerialDecode* decode, int rxlen_max, int priority);
   ~SocketSerial(void);
+  bool is_ok(void);
   bool is_error(void);
   void close_port(void);
   void flush(bool is_decode = true);

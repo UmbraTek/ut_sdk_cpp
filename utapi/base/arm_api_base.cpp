@@ -75,9 +75,9 @@ int ArmApiBase::sendpend(uint8_t rw, const uint8_t cmd[5], uint8_t* tx_data, flo
 
 bool ArmApiBase::is_error(void) { return is_error_; }
 
-int ArmApiBase::get_reg_int8(uint8_t* value, const uint8_t reg[5]) {
+int ArmApiBase::get_reg_int8(uint8_t* value, const uint8_t reg[5], float timeout_s) {
   pthread_mutex_lock(&mutex_);
-  int ret = sendpend(ARM_RW::R, reg, NULL);
+  int ret = sendpend(ARM_RW::R, reg, NULL, timeout_s);
   memcpy(value, &utrc_rx_.data[0], reg[2]);
   pthread_mutex_unlock(&mutex_);
   return ret;
@@ -181,7 +181,7 @@ int ArmApiBase::set_brake_enable(uint8_t axis, uint8_t en) {
   return set_reg_int8(data, reg_->BRAKE_ENABLE);
 }
 int ArmApiBase::get_error_code(uint8_t* code) { return get_reg_int8(code, reg_->ERROR_CODE); }
-int ArmApiBase::get_servo_msg(uint8_t* msg) { return get_reg_int8(msg, reg_->SERVO_MSG); }
+int ArmApiBase::get_servo_msg(uint8_t* msg) { return get_reg_int8(msg, reg_->SERVO_MSG, 3); }
 int ArmApiBase::get_motion_status(uint8_t* status) { return get_reg_int8(status, reg_->MOTION_STATUS); }
 int ArmApiBase::set_motion_status(uint8_t status) { return set_reg_int8(&status, reg_->MOTION_STATUS); }
 int ArmApiBase::motion_status_into_stop(void) { return set_motion_status(4); }

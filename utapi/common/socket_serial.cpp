@@ -38,6 +38,7 @@ SocketSerial::~SocketSerial(void) {
   delete rx_que_;
 }
 
+bool SocketSerial::is_ok(void) { return !is_error_; }
 bool SocketSerial::is_error(void) { return is_error_; }
 
 void SocketSerial::close_port(void) {

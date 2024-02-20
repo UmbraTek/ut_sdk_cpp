@@ -47,6 +47,7 @@ SocketTcp::~SocketTcp(void) {
 }
 
 bool SocketTcp::is_error(void) { return is_error_; }
+bool SocketTcp::is_ok(void) { return !is_error_; }
 
 void SocketTcp::close_port(void) {
   is_error_ = true;
@@ -92,7 +93,10 @@ void SocketTcp::recv_proc(void) {
 
     if (decode_ != NULL && is_decode_) {
       decode_->parse_put(ch, ret, rx_que_);
+      // Print::hex("[Sock TCP] recv: ", ch, ret);
     } else {
+      // printf(" %d ", ret);
+      if (ret >= SERIAL_DATA_MAX) continue;
       rx_stream_.len = ret;
       memcpy(rx_stream_.data, ch, rx_stream_.len);
       rx_que_->push_back(&rx_stream_);

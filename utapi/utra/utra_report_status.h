@@ -28,4 +28,13 @@ class UtraReportStatus100Hz : public ArmReportStatus {
   SocketTcp *socket_tcp_ = NULL;
 };
 
+class UtraReportStatusXXHz : public ArmReportStatus {
+ public:
+  UtraReportStatusXXHz(char *ip, int axis);
+  ~UtraReportStatusXXHz(void);
+
+ private:
+  SocketTcp *socket_tcp_ = NULL;
+};
+
 #endif

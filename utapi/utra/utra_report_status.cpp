@@ -39,3 +39,25 @@ UtraReportStatus100Hz::~UtraReportStatus100Hz(void) {
     delete socket_tcp_;
   }
 }
+
+/**
+ *
+ * This interface is a special interface for robot arm customization. Please contact umbratek if you need it.
+ *
+ */
+UtraReportStatusXXHz::UtraReportStatusXXHz(char* ip, int axis) {
+  socket_tcp_ = new SocketTcp(ip, 30004, 1600, NULL, 97000, 45);
+  if (socket_tcp_->is_error()) {
+    printf("[UtraReSt] Error: socket_file open failed, %s\n", ip);
+    return;
+  }
+  arminit(socket_tcp_, axis);
+  sleep(1);
+}
+
+UtraReportStatusXXHz::~UtraReportStatusXXHz(void) {
+  if (socket_tcp_ != NULL) {
+    socket_tcp_->close_port();
+    delete socket_tcp_;
+  }
+}

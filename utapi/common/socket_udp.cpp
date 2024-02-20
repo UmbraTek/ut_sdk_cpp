@@ -5,9 +5,11 @@
  * Author: Jimy Zhang <jimy.zhang@umbratek.com> <jimy92@163.com>
  ============================================================================*/
 #include "socket_udp.h"
+
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
 #include "linuxcvl.h"
 #include "print.h"
 
@@ -40,6 +42,7 @@ SocketUdp::~SocketUdp(void) {
   delete rx_que_;
 }
 
+bool SocketUdp::is_ok(void) { return !is_error_; }
 bool SocketUdp::is_error(void) { return is_error_; }
 
 void SocketUdp::close_port(void) {

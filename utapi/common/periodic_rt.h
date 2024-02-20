@@ -22,6 +22,12 @@
 
 #include "timer.h"
 
+typedef struct {
+  int priority = 2;
+  uint64_t stack = (1024 * 1000 * 2);
+  char name[30] = "utra_main";
+} rttask_msg_t;
+
 class RtTask {
  public:
   /**
@@ -44,7 +50,7 @@ class RtTask {
     if (is_running_) return;
 
     is_running_ = true;
-    thread_id_ = new std::thread(&RtTask::loop_function, this);
+    thread_id_ = std::thread(&RtTask::loop_function, this);
   }
 
   void stop(void) {
@@ -81,11 +87,11 @@ class RtTask {
   float max_period_ = 0;              // 线程最大周期调度时间
   float max_runtime_ = 0;             // s函数最大运行时间
 
-  float period_s_;          // 函数周期运行时间
-  std::string name_;        // 线程名字
-  long stack_size_;         // 线程堆栈大小
-  int priority_;            // 线程优先级
-  std::thread* thread_id_;  // 线程创建返回id
+  float period_s_;         // 函数周期运行时间
+  std::string name_;       // 线程名字
+  long stack_size_;        // 线程堆栈大小
+  int priority_;           // 线程优先级
+  std::thread thread_id_;  // 线程创建返回id
 
   // 设置线程堆栈大小
   void stack_prefault(long size) {

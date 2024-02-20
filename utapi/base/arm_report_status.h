@@ -51,8 +51,9 @@ class ArmReportStatus {
   int frame_len = 0;
   bool is_update_ = 0;
   serial_stream_t rxdata_;
+  serial_stream_t rxdata_pre_;
   int report_flag_ = 0;
-  arm_report_status_t report_status_[3];
+  arm_report_status_t report_status_[10];
   RtPeriodicMemberFun<ArmReportStatus>* recv_task_ = NULL;
 
   void flush_data(uint8_t* rx_data, int len);

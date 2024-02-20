@@ -161,7 +161,7 @@ class ArmApiBase {
   int pend(uint8_t rx_len, float timeout_s = 0.001);
   int sendpend(uint8_t rw, const uint8_t cmd[5], uint8_t* tx_data, float timeout_s = 0.1);
 
-  int get_reg_int8(uint8_t* value, const uint8_t reg[5]);
+  int get_reg_int8(uint8_t* value, const uint8_t reg[5], float timeout_s = 0.1f);
   int set_reg_int8(uint8_t* value, const uint8_t reg[5]);
   int get_reg_int32(int* value, const uint8_t reg[5], int n = 1);
   int set_reg_int32(int* value, const uint8_t reg[5], int n = 1);

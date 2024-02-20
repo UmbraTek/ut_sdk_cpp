@@ -14,6 +14,7 @@ void ArmReportStatus::arminit(Socket* socket_fp, int axis) {
   axis_ = axis;
   frame_len = 17 + axis_ * 4 + 6 * 4 + axis_ * 4;
   socket_fp_ = socket_fp;
+  rxdata_pre_.len = 0;
   recv_task_ = new RtPeriodicMemberFun<ArmReportStatus>(0.0005, "recv_task", 1024 * 512, 30, &ArmReportStatus::recv_proc, this);
   recv_task_->start();
 }
@@ -30,7 +31,25 @@ bool ArmReportStatus::is_update(void) {
 
 void ArmReportStatus::recv_proc(void) {
   int ret = socket_fp_->read_frame(&rxdata_, 0);
-  if (ret == 0) flush_data(rxdata_.data, rxdata_.len);
+  if (ret != 0) return;
+
+  if (rxdata_pre_.len != 0) {
+    // printf("len:%d %d\n", rxdata_pre_.len, rxdata_.len);
+    int temp = rxdata_pre_.len;
+    rxdata_pre_.len += rxdata_.len;
+    if (rxdata_pre_.len >= SERIAL_DATA_MAX) {
+      rxdata_pre_.len = 0;
+      return;
+    }
+    memcpy(&rxdata_pre_.data[temp], rxdata_.data, rxdata_.len);
+    if (rxdata_pre_.len % frame_len == 0) flush_data(rxdata_pre_.data, rxdata_pre_.len);
+    rxdata_pre_.len = 0;
+  } else if (rxdata_.len % frame_len == 0) {
+    flush_data(rxdata_.data, rxdata_.len);
+  } else {
+    rxdata_pre_.len = rxdata_.len;
+    memcpy(rxdata_pre_.data, rxdata_.data, rxdata_.len);
+  }
 }
 
 void ArmReportStatus::flush_data(uint8_t* rx_data, int len) {
@@ -46,6 +65,14 @@ void ArmReportStatus::flush_data(uint8_t* rx_data, int len) {
   if (++report_flag_ >= 3) report_flag_ = 0;
   memcpy(&report_status_[report_flag_], &rx_data[k], 17);
   int axis = report_status_[report_flag_].axis;
+  if (axis != axis_) {
+    printf("[ArmReSta] Error: flush_data axis %d\n", axis);
+    return;
+  }
+  if (report_status_[report_flag_].len != frame_len) {
+    printf("[ArmReSta] Error: frame_len %d,\n", report_status_[report_flag_].len);
+    return;
+  }
   HexData::hex_to_fp32(&rx_data[k + 17], report_status_[report_flag_].joint, axis);
   HexData::hex_to_fp32(&rx_data[k + 17 + axis * 4], report_status_[report_flag_].pose, 6);
   HexData::hex_to_fp32(&rx_data[k + 17 + axis * 4 + 6 * 4], report_status_[report_flag_].tau, axis);

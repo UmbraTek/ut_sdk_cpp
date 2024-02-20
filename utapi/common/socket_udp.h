@@ -9,14 +9,15 @@
 
 #include <arpa/inet.h>
 #include <pthread.h>
+
 #include "periodic_rt.h"
 #include "socket.h"
-
 
 class SocketUdp : public Socket {
  public:
   SocketUdp(char* ip, int port, int rxque_max, SerialDecode* decode, int rxlen_max, int priority);
   ~SocketUdp(void);
+  bool is_ok(void);
   bool is_error(void);
   void close_port(void);
   void flush(bool is_decode = true);

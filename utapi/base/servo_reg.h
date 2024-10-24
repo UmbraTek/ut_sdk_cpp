@@ -82,6 +82,9 @@ class SERVO_REG {
   uint8_t CPOSTAU_CURRENT[5] = {0x69, 2, 8 + 1, ' ', ' '};  // startId endId
   uint8_t SPVT_CURRENT[5] = {0x6A, 2, 12 + 1, ' ', ' '};    // startId endId
   uint8_t CPVT_CURRENT[5] = {0x6B, 2, 12 + 1, ' ', ' '};    // startId endId
+  const uint8_t CAL_LINEAR_SVPWM[5] = {0x72, ' ', ' ', 1, 0};
+  const uint8_t CAL_ELEC[5] = {0x74, ' ', ' ', 1, 0};
+  const uint8_t CAL_MULTI[5] = {0x75, ' ', ' ', 1, 0};
 };
 
 #endif

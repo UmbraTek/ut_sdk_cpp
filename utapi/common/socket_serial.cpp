@@ -34,8 +34,8 @@ SocketSerial::~SocketSerial(void) {
   is_error_ = true;
   close(fp_);
   recv_task_->stop();
-  delete recv_task_;
-  delete rx_que_;
+  if (recv_task_ != NULL) delete recv_task_;
+  if (rx_que_ != NULL) delete rx_que_;
 }
 
 bool SocketSerial::is_ok(void) { return !is_error_; }

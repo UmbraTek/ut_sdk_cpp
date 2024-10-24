@@ -565,3 +565,9 @@ int ServoApiBase::get_cpvt_current_(uint8_t sid, uint8_t eid, int* num, float* p
 
   return temp;
 }
+
+int ServoApiBase::cal_linear_svpwm_(int id) {
+  return set_reg_int8(id, (reg_.CAL_LINEAR_SVPWM[0] & 0x0F) | 0xA0, reg_.CAL_LINEAR_SVPWM);
+}
+int ServoApiBase::cal_electrical_(int id) { return set_reg_int8(id, (reg_.CAL_ELEC[0] & 0x0F) | 0xA0, reg_.CAL_ELEC); }
+int ServoApiBase::cal_multi_(int id) { return set_reg_int8(id, (reg_.CAL_MULTI[0] & 0x0F) | 0xA0, reg_.CAL_MULTI); }

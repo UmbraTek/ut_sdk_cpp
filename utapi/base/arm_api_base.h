@@ -145,7 +145,7 @@ class ArmApiBase {
   int get_cgpio_hw_version(uint8_t* value);
 
  protected:
-  ARM_REG* reg_;
+  ARM_REG* reg_ = NULL;
 
  private:
   utrc_t utrc_tx_;

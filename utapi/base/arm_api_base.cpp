@@ -19,9 +19,9 @@ ArmApiBase::ArmApiBase(Socket* socket_fp) {
 
 ArmApiBase::~ArmApiBase(void) {
   is_error_ = true;
-  delete socket_fp_;
-  delete reg_;
-  delete utrc_client_;
+  if (socket_fp_ != NULL) delete socket_fp_;
+  if (reg_ != NULL) delete reg_;
+  if (utrc_client_ != NULL) delete utrc_client_;
 }
 
 void ArmApiBase::arminit(Socket* socket_fp) {

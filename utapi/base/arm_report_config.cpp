@@ -1,5 +1,6 @@
 
 #include "base/arm_report_config.h"
+
 #include "common/hex_data.h"
 #include "common/print.h"
 
@@ -7,7 +8,7 @@ ArmReportConfig::ArmReportConfig(void) {}
 ArmReportConfig::ArmReportConfig(Socket* socket_fp) { arminit(socket_fp); }
 ArmReportConfig::~ArmReportConfig(void) {
   is_error_ = true;
-  delete socket_fp_;
+  if (socket_fp_ != NULL) delete socket_fp_;
 }
 void ArmReportConfig::arminit(Socket* socket_fp) {
   frame_len = 80;

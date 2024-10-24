@@ -8,7 +8,7 @@ ArmReportStatus::ArmReportStatus(void) {}
 ArmReportStatus::ArmReportStatus(Socket* socket_fp, int axis) { arminit(socket_fp, axis); }
 ArmReportStatus::~ArmReportStatus(void) {
   is_error_ = true;
-  delete socket_fp_;
+  if (socket_fp_ != NULL) delete socket_fp_;
 }
 void ArmReportStatus::arminit(Socket* socket_fp, int axis) {
   axis_ = axis;

@@ -138,3 +138,7 @@ int AdraApiBase::get_cpostau_current(uint8_t sid, uint8_t eid, int* num, float* 
 int AdraApiBase::get_cpvt_current(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret) {
   return get_cpvt_current_(sid, eid, num, pos, vel, tau, ret);
 }
+
+int AdraApiBase::cal_linear_svpwm(int id) { return cal_linear_svpwm_(id); }
+int AdraApiBase::cal_electrical(int id) { return cal_electrical_(id); }
+int AdraApiBase::cal_multi(int id) { return cal_multi_(id); }

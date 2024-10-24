@@ -38,8 +38,8 @@ SocketUdp::SocketUdp(char *ip, int port, int rxque_max, SerialDecode *decode, in
 
 SocketUdp::~SocketUdp(void) {
   is_error_ = true;
-  delete recv_task_;
-  delete rx_que_;
+  if (recv_task_ != NULL) delete recv_task_;
+  if (rx_que_ != NULL) delete rx_que_;
 }
 
 bool SocketUdp::is_ok(void) { return !is_error_; }

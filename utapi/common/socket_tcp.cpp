@@ -42,8 +42,8 @@ SocketTcp::SocketTcp(char *ip, int port, int rxque_max, SerialDecode *decode, in
 
 SocketTcp::~SocketTcp(void) {
   is_error_ = true;
-  delete recv_task_;
-  delete rx_que_;
+  if (recv_task_ != NULL) delete recv_task_;
+  if (rx_que_ != NULL) delete rx_que_;
 }
 
 bool SocketTcp::is_error(void) { return is_error_; }

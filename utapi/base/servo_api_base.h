@@ -124,6 +124,10 @@ class ServoApiBase {
   int get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
   int get_cpvt_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret);
 
+  int cal_linear_svpwm_(int id);
+  int cal_electrical_(int id);
+  int cal_multi_(int id);
+
  protected:
   uint8_t id_;
   SERVO_REG reg_;

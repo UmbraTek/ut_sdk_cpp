@@ -418,6 +418,23 @@ int ArmApiBase::set_dh_offset(uint8_t axis, float* offset) {
   return ret;
 }
 
+int ArmApiBase::get_debug_code(uint8_t axis, int32_t* code) {
+  uint8_t tx_data[2] = {reg_->DEBUG_CODE[0], axis};
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::R, reg_->DEBUG_CODE, tx_data);
+  HexData::hex_to_int32_big(&utrc_rx_.data[0], code, 1);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+int ArmApiBase::set_debug_code(uint8_t axis, int32_t code) {
+  uint8_t data[4 + 2] = {reg_->DEBUG_CODE[0], axis};
+  HexData::int32_to_hex_big(code, &data[2]);
+  pthread_mutex_lock(&mutex_);
+  int ret = sendpend(ARM_RW::W, reg_->DEBUG_CODE, data);
+  pthread_mutex_unlock(&mutex_);
+  return ret;
+}
+
 /************************************************************
  *                     State Api
  ************************************************************/

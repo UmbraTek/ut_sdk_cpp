@@ -19,7 +19,7 @@ ArmApiBase::ArmApiBase(Socket* socket_fp) {
 
 ArmApiBase::~ArmApiBase(void) {
   is_error_ = true;
-  if (socket_fp_ != NULL) delete socket_fp_;
+  // if (socket_fp_ != NULL) delete socket_fp_;
   if (reg_ != NULL) delete reg_;
   if (utrc_client_ != NULL) delete utrc_client_;
 }

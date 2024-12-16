@@ -105,6 +105,8 @@ class ArmApiBase {
   int set_friction(uint8_t axis, float* fri);
   int get_dh_offset(uint8_t axis, float* offset);
   int set_dh_offset(uint8_t axis, float* offset);
+  int get_debug_code(uint8_t axis, int32_t* code);
+  int set_debug_code(uint8_t axis, int32_t code);
 
   int get_utrc_int8_now(uint8_t line, uint8_t id, uint8_t reg, uint8_t* value);
   int set_utrc_int8_now(uint8_t line, uint8_t id, uint8_t reg, uint8_t value);
@@ -146,15 +148,14 @@ class ArmApiBase {
 
  protected:
   ARM_REG* reg_ = NULL;
+  int is_error_ = false;
 
  private:
   utrc_t utrc_tx_;
   utrc_t utrc_rx_;
   Socket* socket_fp_ = NULL;
   UtrcClient* utrc_client_ = NULL;
-
   uint8_t axis_ = 0;
-  int is_error_ = false;
   pthread_mutex_t mutex_;
 
   void send(uint8_t rw, uint8_t cmd, uint8_t cmd_data_len, uint8_t* cmd_data);

@@ -96,6 +96,7 @@ class ARM_REG {
 
   const uint8_t FRICTION[5] = {0x70, 2, 16, 2 + 16, 0};
   const uint8_t DH_OFFSET[5] = {0x71, 2, 16, 2 + 16, 0};
+  const uint8_t DEBUG_CODE[5] = {0x72, 2, 4, 6, 0};
 };
 
 #endif

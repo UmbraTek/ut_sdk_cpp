@@ -148,15 +148,14 @@ class ArmApiBase {
 
  protected:
   ARM_REG* reg_ = NULL;
+  int is_error_ = false;
 
  private:
   utrc_t utrc_tx_;
   utrc_t utrc_rx_;
   Socket* socket_fp_ = NULL;
   UtrcClient* utrc_client_ = NULL;
-
   uint8_t axis_ = 0;
-  int is_error_ = false;
   pthread_mutex_t mutex_;
 
   void send(uint8_t rw, uint8_t cmd, uint8_t cmd_data_len, uint8_t* cmd_data);

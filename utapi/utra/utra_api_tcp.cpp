@@ -11,6 +11,7 @@ UtraApiTcp::UtraApiTcp(char* ip) {
 
   socket_tcp_ = new SocketTcp(ip, 502, 16, utrc_decode_, 128, 45);
   if (socket_tcp_->is_error()) {
+    is_error_ = true;
     printf("[UtraApiT] Error: socket_file open failed, %s\n", ip);
     return;
   }

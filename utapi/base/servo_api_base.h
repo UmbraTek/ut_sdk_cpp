@@ -123,6 +123,7 @@ class ServoApiBase {
   int get_spostau_current_(int id, int* num, float* pos, float* tau);
   int get_cpostau_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* tau, int* ret);
   int get_cpvt_current_(uint8_t sid, uint8_t eid, int* num, float* pos, float* vel, float* tau, int* ret);
+  int set_cvel_target_(uint8_t sid, uint8_t eid, float* vel);
 
   int cal_linear_svpwm_(int id);
   int cal_electrical_(int id);

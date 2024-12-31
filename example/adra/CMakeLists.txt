@@ -48,6 +48,12 @@ add_executable(demo9_motion_cpvt
 )
 target_link_libraries(demo9_motion_cpvt utapi pthread rt m)
 
+add_executable(demo10_motion_cvel
+	demo10_motion_cvel.cpp
+)
+target_link_libraries(demo10_motion_cvel utapi pthread rt m)
+
+
 add_executable(demo11_cal_test
 	demo11_cal_test.cpp
 )

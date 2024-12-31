@@ -121,6 +121,7 @@ class AdraApiBase : private ServoApiBase {
   int set_tau_adrc_param(int id, uint8_t i, float param);
 
   int set_cpos_target(uint8_t sid, uint8_t eid, float* pos);
+  int set_cvel_target(uint8_t sid, uint8_t eid, float* vel);
   int set_ctau_target(uint8_t sid, uint8_t eid, float* tau);
   int set_cpostau_target(uint8_t sid, uint8_t eid, float* pos, float* tau);
   int set_cposvel_target(uint8_t sid, uint8_t eid, float* pos, float* vel);

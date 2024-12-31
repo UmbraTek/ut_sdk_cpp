@@ -121,6 +121,7 @@ int AdraApiBase::get_tau_adrc_param(int id, uint8_t i, float* param) { return ge
 int AdraApiBase::set_tau_adrc_param(int id, uint8_t i, float param) { return set_tau_adrc_param_(id, i, param); }
 
 int AdraApiBase::set_cpos_target(uint8_t sid, uint8_t eid, float* pos) { return set_cpos_target_(sid, eid, pos); }
+int AdraApiBase::set_cvel_target(uint8_t sid, uint8_t eid, float* vel) { return set_cvel_target_(sid, eid, vel); }
 int AdraApiBase::set_ctau_target(uint8_t sid, uint8_t eid, float* tau) { return set_ctau_target_(sid, eid, tau); }
 int AdraApiBase::set_cpostau_target(uint8_t sid, uint8_t eid, float* pos, float* tau) {
   return set_cpostau_target_(sid, eid, pos, tau);

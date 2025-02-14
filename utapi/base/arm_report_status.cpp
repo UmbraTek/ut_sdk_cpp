@@ -8,9 +8,19 @@ ArmReportStatus::ArmReportStatus(void) {}
 ArmReportStatus::ArmReportStatus(Socket* socket_fp, int axis) { arminit(socket_fp, axis); }
 ArmReportStatus::~ArmReportStatus(void) {
   is_error_ = true;
-  if (socket_fp_ != NULL) delete socket_fp_;
+  if (recv_task_ != NULL) {
+    recv_task_->stop();
+    delete recv_task_;
+  }
 }
 void ArmReportStatus::arminit(Socket* socket_fp, int axis) {
+  if (recv_task_ != NULL) {
+    if (recv_task_ != NULL) {
+      socket_fp->close_port();
+      recv_task_->stop();
+      delete recv_task_;
+    }
+  }
   axis_ = axis;
   frame_len = 17 + axis_ * 4 + 6 * 4 + axis_ * 4;
   socket_fp_ = socket_fp;
@@ -30,7 +40,7 @@ bool ArmReportStatus::is_update(void) {
 }
 
 void ArmReportStatus::recv_proc(void) {
-  int ret = socket_fp_->read_frame(&rxdata_, 0);
+  int ret = socket_fp_->read_frame(&rxdata_, 0.00003);
   if (ret != 0) return;
 
   if (rxdata_pre_.len != 0) {

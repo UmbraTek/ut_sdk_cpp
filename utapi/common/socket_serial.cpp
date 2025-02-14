@@ -26,15 +26,18 @@ SocketSerial::SocketSerial(const char *port, int baud, int rxque_max, SerialDeco
     is_decode_ = true;
 
   flush();
-  recv_task_ = new RtPeriodicMemberFun<SocketSerial>(0, "recv_task", 1024 * 1024, priority, &SocketSerial::recv_proc, this);
+  recv_task_ =
+      new RtPeriodicMemberFun<SocketSerial>(0.00003, "recv_task", 1024 * 1024, priority, &SocketSerial::recv_proc, this);
   recv_task_->start();
 }
 
 SocketSerial::~SocketSerial(void) {
   is_error_ = true;
-  close(fp_);
-  recv_task_->stop();
-  if (recv_task_ != NULL) delete recv_task_;
+  if (recv_task_ != NULL) {
+    close_port();
+    recv_task_->stop();
+    delete recv_task_;
+  }
   if (rx_que_ != NULL) delete rx_que_;
 }
 

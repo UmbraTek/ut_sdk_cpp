@@ -32,13 +32,17 @@ SocketUdp::SocketUdp(char *ip, int port, int rxque_max, SerialDecode *decode, in
     is_decode_ = true;
 
   flush();
-  recv_task_ = new RtPeriodicMemberFun<SocketUdp>(0, "recv_task", 1024 * 1024, priority, &SocketUdp::recv_proc, this);
+  recv_task_ = new RtPeriodicMemberFun<SocketUdp>(00003, "recv_task", 1024 * 1024, priority, &SocketUdp::recv_proc, this);
   recv_task_->start();
 }
 
 SocketUdp::~SocketUdp(void) {
   is_error_ = true;
-  if (recv_task_ != NULL) delete recv_task_;
+  if (recv_task_ != NULL) {
+    close_port();
+    recv_task_->stop();
+    delete recv_task_;
+  }
   if (rx_que_ != NULL) delete rx_que_;
 }
 

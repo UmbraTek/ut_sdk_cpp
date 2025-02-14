@@ -56,8 +56,7 @@ class RtTask {
   void stop(void) {
     if (!is_running_) return;
     is_running_ = false;
-    // delete thread_id_;
-    // thread_id_->join();
+    thread_id_.join();
   }
 
   void print_status(void) {

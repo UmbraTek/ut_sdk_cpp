@@ -8,9 +8,19 @@ ArmReportConfig::ArmReportConfig(void) {}
 ArmReportConfig::ArmReportConfig(Socket* socket_fp) { arminit(socket_fp); }
 ArmReportConfig::~ArmReportConfig(void) {
   is_error_ = true;
-  if (socket_fp_ != NULL) delete socket_fp_;
+  if (recv_task_ != NULL) {
+    recv_task_->stop();
+    delete recv_task_;
+  }
 }
 void ArmReportConfig::arminit(Socket* socket_fp) {
+  if (recv_task_ != NULL) {
+    if (recv_task_ != NULL) {
+      socket_fp->close_port();
+      recv_task_->stop();
+      delete recv_task_;
+    }
+  }
   frame_len = 80;
   socket_fp_ = socket_fp;
   recv_task_ = new RtPeriodicMemberFun<ArmReportConfig>(0.0005, "recv_task", 1024 * 512, 30, &ArmReportConfig::recv_proc, this);

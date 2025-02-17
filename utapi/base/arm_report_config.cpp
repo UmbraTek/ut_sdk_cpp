@@ -38,7 +38,7 @@ bool ArmReportConfig::is_update(void) {
 }
 
 void ArmReportConfig::recv_proc(void) {
-  int ret = socket_fp_->read_frame(&rxdata_, 0);
+  int ret = socket_fp_->read_frame(&rxdata_, 0.00003);
   if (ret == 0) flush_data(rxdata_.data, rxdata_.len);
 }
 

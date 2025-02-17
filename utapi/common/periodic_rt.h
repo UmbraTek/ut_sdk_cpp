@@ -8,6 +8,7 @@
 #define __COMMON_PERIODIC_RT_H__
 
 #include <math.h>
+#include <signal.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -21,6 +22,8 @@
 #endif
 
 #include "timer.h"
+
+static void signal_handler(int signum) {}
 
 typedef struct {
   int priority = 2;
@@ -42,6 +45,7 @@ class RtTask {
   RtTask(float period_s, std::string name, long stack_size, int priority)
       : period_s_(period_s), name_(name), stack_size_(stack_size), priority_(priority) {
     clear_max();
+    signal(SIGUSR1, signal_handler);
   }
 
   virtual ~RtTask(void) { stop(); }
@@ -56,6 +60,7 @@ class RtTask {
   void stop(void) {
     if (!is_running_) return;
     is_running_ = false;
+    pthread_kill(thread_id_.native_handle(), SIGUSR1);
     thread_id_.join();
   }
 

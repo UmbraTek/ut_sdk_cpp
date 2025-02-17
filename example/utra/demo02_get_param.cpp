@@ -110,5 +110,8 @@ int main(int argc, char *argv[]) {
   ret = ubot->set_limit_geometry_enable(1);
   printf("set_limit_gc  : %d\n", ret);
 
+  delete ubot;
+  sleep(1);
+
   return 0;
 }

@@ -45,3 +45,6 @@ target_link_libraries(demo25_flxiv_motion_now utapi pthread rt m)
 
 add_executable(demo103_debug_code demo103_debug_code.cpp)
 target_link_libraries(demo103_debug_code utapi pthread rt m)
+
+add_executable(demo104_debug demo104_debug.cpp)
+target_link_libraries(demo104_debug utapi pthread rt m)
